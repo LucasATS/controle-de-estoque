@@ -9,17 +9,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.geometry.Pos;
 
-import javax.swing.JTable;
-/**
- * JavaFX App
- */
 public class App extends Application {
 
     public Estoque estoque = new Estoque();
@@ -39,7 +34,6 @@ public class App extends Application {
 
         GridPane tabelaNomes = nomesGrupo();
         
-
         Label hello = new Label("Seja Bem Vindo");
         hello.setLayoutX(10);
         hello.setLayoutY(40);
@@ -56,7 +50,6 @@ public class App extends Application {
         painel.getChildren().add(hello);
 
         stage.setScene(sc);
-
     }
 
     public void addProduto(Stage stage){
@@ -85,7 +78,6 @@ public class App extends Application {
             message.showAndWait();
             
             tela_Principal(stage);
-
         });
 
         lb_nome.setLayoutX(10);
@@ -121,7 +113,6 @@ public class App extends Application {
         painel.getChildren().add(btn_adicionar);
 
         stage.setScene(sc);
-
     }
 
     public void delItem(Stage stage){
@@ -135,8 +126,7 @@ public class App extends Application {
         }
         
         Label lb_nome = new Label("Produto: ");
-        ComboBox cb_nome =new ComboBox<>(FXCollections
-                                 .observableArrayList(itens));
+        ComboBox cb_nome =new ComboBox<>(FXCollections.observableArrayList(itens));
 
         Button btn_deletar = new Button("Deletar");
 
@@ -151,7 +141,6 @@ public class App extends Application {
             message.showAndWait();
             
             tela_Principal(stage);
-
         });
 
         lb_nome.setLayoutX(10);
@@ -172,8 +161,8 @@ public class App extends Application {
         painel.getChildren().add(btn_deletar);
 
         stage.setScene(sc);
-
     }
+
     public void aumentaEstoque(Stage stage){
         Pane painel = new Pane();
         ToolBar menu = cria_barraMenu(stage);
@@ -186,8 +175,7 @@ public class App extends Application {
         
         Label lb_nome = new Label("Produto: ");
         ComboBox cb_nome =new ComboBox<>(
-            FXCollections
-            .observableArrayList(itens)
+            FXCollections.observableArrayList(itens)
         );
         Label lb_quantidade = new Label("Adicionar +: ");
         TextField tb_quantidade = new TextField();
@@ -207,7 +195,6 @@ public class App extends Application {
             message.showAndWait();
             
             tela_Principal(stage);
-
         });
 
         lb_nome.setLayoutX(10);
@@ -222,11 +209,9 @@ public class App extends Application {
         tb_quantidade.setLayoutX(100);
         tb_quantidade.setLayoutY(80);
 
-
         btn_add.setLayoutX(70);
         btn_add.setLayoutY(120);
 
-        
         Scene sc = new Scene(painel,650,250);
 
         painel.getChildren().add(menu);
@@ -237,7 +222,6 @@ public class App extends Application {
         painel.getChildren().add(btn_add);
 
         stage.setScene(sc);
-
     }
 
     public void alteraValor(Stage stage){
@@ -287,11 +271,9 @@ public class App extends Application {
         tb_valor.setLayoutX(100);
         tb_valor.setLayoutY(80);
 
-
         btn_salva.setLayoutX(70);
         btn_salva.setLayoutY(120);
 
-        
         Scene sc = new Scene(painel,650,250);
 
         painel.getChildren().add(menu);
@@ -302,7 +284,6 @@ public class App extends Application {
         painel.getChildren().add(btn_salva);
 
         stage.setScene(sc);
-
     }
 
     public ToolBar cria_barraMenu(Stage stage){
@@ -417,12 +398,9 @@ public class App extends Application {
         tabela.setLayoutX(10);
         tabela.setLayoutY(100);
         return tabela;
-        
-
-        
+                
     }
     public static void main(String[] args) {
         launch();
     }
-
 }
