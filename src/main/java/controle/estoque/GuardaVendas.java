@@ -50,36 +50,3 @@ public class GuardaVendas {
         return "Venda realizada com Sucesso.";
     }
 }
-
-//Inclua uma nova classe que guarde as vendas realizadas na quitanda;
-//2) O estoque e as vendas devem ser gravados ao sair do programa;
-//3) O estoque e as vendas devem ser lidos ao iniciar o programa;
-//4) A quantidade de vendas por vendedor também deve constar no relatório;
-//5) (Desafio) Faça uma interface javafx para seu sistema de estoque e vendas;
-
-
-
-
-
-
-
-
-
-
-
-
-
-//RegistoVendas
-package controle.estoque;
-
-public class RegistroVenda {
-    String nome;
-    int quantidade;
-    double valor;
-    
-    RegistroVenda(String nome, int quantidade, double valor){
-        this.nome=nome;
-        this.quantidade=quantidade;
-        this.valor=valor;
-    }
-}
