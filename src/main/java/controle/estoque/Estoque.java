@@ -118,18 +118,16 @@ public class Estoque {
             String linha;
             while (modelo.hasNextLine()) {
                 linha = modelo.nextLine();
-                if (linha.equals("{dados}")==true) {
+                if (linha.equals("{dados-estoque}")==true) {
 
                     for (itemEstoque item : itens){
                         String valorRS = new DecimalFormat("R$ #,###.00").format(item.valor);
-                        escreve.append("                <tr>\n"+
-                            "                   <td>"+item.nome+"</td>"+
-                            "<td>"+valorRS+"</td>"+
-                            "<td>"+item.quantidade+"</td>\n"+
-                            "               </tr>\n"
-                            );
+                        escreve.append("<tr>\n" + 
+                            "<td>"+item.nome+"</td>" + 
+                            "<td>"+valorRS+"</td>" + 
+                            "<td>"+item.quantidade+"</td>\n" +
+                            "</tr>\n");
                     }
-
                 }else{
                     escreve.append(linha);
                 }

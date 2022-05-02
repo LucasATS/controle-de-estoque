@@ -10,6 +10,6 @@ public class RegistroVenda {
         this.nome = nome;
         this.quantidade = quantidade;
         this.valor = valor;
-	this.vendedor = vendedor;
+	    this.vendedor = vendedor;
     }
 }
