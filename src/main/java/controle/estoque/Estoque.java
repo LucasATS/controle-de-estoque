@@ -2,6 +2,9 @@ package controle.estoque;
 
 import java.io.File;
 import java.util.Scanner;
+
+import controle.Keys;
+
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
@@ -13,21 +16,24 @@ public class Estoque {
     }
     Estoque(){
         try {
-            File arquivo = new File("bd/estoqueBD.txt");
+            File arquivo = new File(Keys.files.EstoqueBD);
+
             Scanner estoqueBD = new Scanner(arquivo);
             while (estoqueBD.hasNextLine()) {
                 String[] dados = estoqueBD.nextLine().split(";");
                 novoItem(dados[0], Integer.parseInt(dados[1]), Double.parseDouble(dados[2]));
             }
+
             estoqueBD.close();
         } 
         catch (FileNotFoundException e) {
-            System.out.println("Ocorreu um erro inesperado...");
+            ErroException(Keys.alertas.erro_arquivo_nao_encontrado, e);
         }
     }
     void salvaFile(){
         try {
-            File arquivo = new File("bd/estoqueBD.txt");
+            File arquivo = new File(Keys.files.EstoqueBD);
+
             arquivo.createNewFile();
             FileWriter escreve = new FileWriter(arquivo,false);
             for (itemEstoque item : itens){
@@ -35,13 +41,13 @@ public class Estoque {
             }
             escreve.close();
         } catch (Exception e) {
-            System.out.println("Ocorreu um erro inesperado...");
+            ErroException(Keys.alertas.erro_inesperado, e);
         }
     }
     String novoItem(String nome, int quantidade, double valor){
         int indice = indiceDe(nome);
         if (indice !=-1){
-            return "Item já existe.";
+            return Keys.alertas.erro_item_ja_existe;
         }
         itemEstoque[] armazena = this.itens.clone();
         int quantidadeAtual = this.itens.length;
@@ -53,12 +59,12 @@ public class Estoque {
         }
         this.itens[i] = new itemEstoque(nome, quantidade, valor);
         salvaFile();
-        return "Item adicionado com Sucesso.";
+        return Keys.alertas.msg_item_add_com_sucesso;
     }
     String deletaItem(String nome){
         int indice = indiceDe(nome);
         if (indice ==-1){
-            return "Item inexistente.";
+            return Keys.alertas.erro_item_inexistente;
         }
         itemEstoque[] armazena = this.itens.clone();
         armazena[indice]=null;
@@ -72,7 +78,7 @@ public class Estoque {
             }
         }
         salvaFile();
-        return "Item deletado com Sucesso.";
+        return Keys.alertas.msg_item_rmv_com_sucesso;
     }
     int indiceDe(String nome){
         int pos = -1;
@@ -86,7 +92,7 @@ public class Estoque {
     String adicionaQuantidade(String nome,int quantidade){
         int indice = indiceDe(nome);
         if (indice ==-1){
-            return "Item inexistente.";
+            return Keys.alertas.erro_item_inexistente;
         }
         this.itens[indice].alteraQuantidade(this.itens[indice].quantidade + quantidade);
         salvaFile();
@@ -95,7 +101,7 @@ public class Estoque {
     String alterarValorMedio(String nome,double valor){
         int indice = indiceDe(nome);
         if (indice ==-1){
-            return "Item inexistente";
+            return Keys.alertas.erro_item_inexistente;
         }
         this.itens[indice].alteraValor(valor);
         salvaFile();
@@ -104,9 +110,9 @@ public class Estoque {
     String geraHTML(){
 
         try {
-            File arquivomodel = new File("models/modelo.html");
+            File arquivomodel = new File(Keys.files.Modelo_relatorio_html);
             Scanner modelo = new Scanner(arquivomodel);
-            File arquivo = new File("relatorio.html");
+            File arquivo = new File(Keys.files.Relatorio_html);
             arquivo.createNewFile();
             FileWriter escreve = new FileWriter(arquivo,false);
             String linha;
@@ -131,8 +137,14 @@ public class Estoque {
             modelo.close();
             escreve.close();
         } catch (Exception e) {
-            System.out.println("Ocorreu um erro inesperado...");
+            System.out.println(Keys.alertas.erro_inesperado);
         }
-        return "Relatório gerado.";
+        return Keys.alertas.msg_relatorio_gerado_com_sucesso;
+    }
+
+    public String ErroException(String msg, Exception e){
+        String alert = msg + "\n#Error: " + e.getMessage();
+        System.out.println(alert);
+        return alert;
     }
 }

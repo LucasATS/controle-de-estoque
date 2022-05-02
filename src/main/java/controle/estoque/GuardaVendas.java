@@ -56,7 +56,7 @@ public class GuardaVendas {
         this.itens[i] = new RegistroVenda(nome, vendedor, quantidade, valor);
         salvaFile();
         
-        return Keys.alertas.venda_realizada;
+        return Keys.alertas.msg_venda_realizada;
     }
 
     public String ErroException(String msg, Exception e){
