@@ -1,7 +1,12 @@
 //RegistoVendas
 package controle.estoque;
+import javafx.scene.control.Button;
 
 public class RegistroVenda {
+
+    String str;
+    Button remove = new Button("Remover");
+
     String nome, vendedor;
     int quantidade;
     double valor;
@@ -10,6 +15,13 @@ public class RegistroVenda {
         this.nome = nome;
         this.quantidade = quantidade;
         this.valor = valor;
+
+        this.str = 
+        nome + " " +
+        quantidade + " " +
+        valor + " " +
+        (quantidade * valor)
+        ;
 	    this.vendedor = vendedor;
     }
 }
