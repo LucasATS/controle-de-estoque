@@ -1,5 +1,6 @@
 package controle.estoque;
 
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;
@@ -10,6 +11,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -19,6 +24,16 @@ public class App extends Application {
 
     public Estoque estoque = new Estoque();
 
+    public GuardaVendas guardaVenda = new GuardaVendas();
+
+    public Aluno[] alunos = new Aluno[]{
+        new Aluno("Bárbara Marcheti Fiorin", "2021101634","N30"),
+        new Aluno("Gabriel Espinoza de Souza","2022103060","N20"),
+        new Aluno("Lucas Almeida Tiburtino da Silva", "2021101577","N30"),
+        new Aluno("Matheus Fernandes de Figueiredo", "2021101596","N30"),
+        new Aluno("Raylla do Sol Dias", "2021101569","N30"),
+        new Aluno("Thales Tayson do Nascimento Vargas", "2021101581","N30"),
+    };
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -285,6 +300,97 @@ public class App extends Application {
 
         stage.setScene(sc);
     }
+    public void telaVenda(Stage stage){
+        Pane painel = new Pane();
+        ToolBar menu = cria_barraMenu(stage);
+
+        ArrayList<RegistroVenda> listVenda = new ArrayList<RegistroVenda>();
+        
+        String itens[] = new String[estoque.quantItens()];
+        for (int i=0; i< estoque.quantItens();i++){
+            itens[i] = estoque.itens[i].nome;
+        }
+
+        Label lb_nome = new Label("Escolha um produto: ");
+        Label lb_quantidade = new Label("Escolha Quantidade: ");
+        Label lb_valor = new Label("Valor: ");
+
+        ComboBox vendedor = new ComboBox<>(
+            FXCollections.observableArrayList(alunos)
+        );
+
+        ComboBox produto = new ComboBox<>(
+            FXCollections.observableArrayList(alunos)
+        );
+
+        TextField tb_quantidade = new TextField();
+        TextField tb_valor = new TextField();
+        Button btn_adicionar = new Button("+");
+
+        TableView carrinho = new TableView<>();
+
+        TableColumn<String, String> col1 = 
+        new TableColumn<>();
+        
+    
+        TableColumn<Button, Button> col2 = 
+        new TableColumn<>();
+
+        carrinho.getColumns().add(col1);
+        carrinho.getColumns().add(col2);
+
+        btn_adicionar.setOnAction(evento ->{
+            
+            listVenda.add(new RegistroVenda(
+                produto.getValue().toString(),
+                vendedor.getValue().toString(), 
+                Integer.parseInt(tb_quantidade.getText()), 
+                Double.parseDouble(tb_valor.getText().replace(",", "."))
+            ));
+            carrinho.getItems().clear();
+            for (RegistroVenda item : listVenda) {
+                carrinho.getItems().add(
+                    item.nome + " " +
+                    item.quantidade + " " +
+                    item.valor + " " +
+                    (item.quantidade * item.valor),
+                    ""
+                );   
+            }
+        });
+
+        lb_nome.setLayoutX(10);
+        lb_nome.setLayoutY(40);
+
+        lb_quantidade.setLayoutX(10);
+        lb_quantidade.setLayoutY(80);
+
+        lb_valor.setLayoutX(10);
+        lb_valor.setLayoutY(120);
+
+
+
+        tb_quantidade.setLayoutX(100);
+        tb_quantidade.setLayoutY(80);
+
+        tb_valor.setLayoutX(100);
+        tb_valor.setLayoutY(120);
+
+        btn_adicionar.setLayoutX(70);
+        btn_adicionar.setLayoutY(160);
+        
+        Scene sc = new Scene(painel,650,250);
+
+        painel.getChildren().add(menu);
+        painel.getChildren().add(lb_nome);
+        painel.getChildren().add(lb_quantidade);
+        painel.getChildren().add(lb_valor);
+        painel.getChildren().add(tb_quantidade);
+        painel.getChildren().add(tb_valor);
+        painel.getChildren().add(btn_adicionar);
+
+        stage.setScene(sc);
+    }
 
     public ToolBar cria_barraMenu(Stage stage){
 
@@ -336,15 +442,8 @@ public class App extends Application {
         return toolbar;
     }
     public GridPane nomesGrupo(){
-        Aluno[] alunos = new Aluno[]{
-            new Aluno("Bárbara Marcheti Fiorin", "2021101634","N30"),
-            new Aluno("Gabriel Espinoza de Souza","2022103060","N20"),
-            new Aluno("Lucas Almeida Tiburtino da Silva", "2021101577","N30"),
-            new Aluno("Matheus Fernandes de Figueiredo", "2021101596","N30"),
-            new Aluno("Raylla do Sol Dias", "2021101569","N30"),
-            new Aluno("Thales Tayson do Nascimento Vargas", "2021101581","N30"),
-        };
         int count = alunos.length;
+
         Label[][] labels = new Label[count][3];
         for (int i=0;i<count;i++){
             labels[i][0] = new Label(alunos[i].nome);
