@@ -23,7 +23,6 @@ import javafx.geometry.Pos;
 public class App extends Application {
 
     public Estoque estoque = new Estoque();
-
     public GuardaVendas guardaVenda = new GuardaVendas();
 
     public Aluno[] alunos = new Aluno[]{
@@ -368,8 +367,6 @@ public class App extends Application {
         lb_valor.setLayoutX(10);
         lb_valor.setLayoutY(120);
 
-
-
         tb_quantidade.setLayoutX(100);
         tb_quantidade.setLayoutY(80);
 
@@ -424,18 +421,20 @@ public class App extends Application {
             alteraValor(stage);
         });
         btn_geraHTML.setOnAction(evento ->{
-            String retorno;
-            retorno = estoque.geraHTML();
+            String r1, r2, retorno;
+            r1 = guardaVenda.geraHTML();
+            r2 = estoque.geraHTML();
+            if(r1 == r2) retorno = r2;           
 
             Alert message = new Alert(Alert.AlertType.INFORMATION);
-            message.setTitle("Estoque:");
+            message.setTitle("Relatório:");
             message.setHeaderText("Resultado:");
             message.setContentText(retorno);
             message.showAndWait();
             
             tela_Principal(stage);
-
         });
+
         toolbar.setLayoutX(0);
         toolbar.setLayoutY(0);
 
@@ -496,9 +495,9 @@ public class App extends Application {
         }
         tabela.setLayoutX(10);
         tabela.setLayoutY(100);
-        return tabela;
-                
+        return tabela;                
     }
+    
     public static void main(String[] args) {
         launch();
     }
