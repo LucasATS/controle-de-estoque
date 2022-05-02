@@ -58,6 +58,37 @@ public class GuardaVendas {
         
         return Keys.alertas.msg_venda_realizada;
     }
+    String geraHTML(){
+        try {
+            File arquivomodel = new File(Keys.files.Modelo_relatorio_html);
+            Scanner modelo = new Scanner(arquivomodel);
+            File arquivo = new File(Keys.files.Relatorio_html);
+            arquivo.createNewFile();
+            FileWriter escreve = new FileWriter(arquivo,false);
+            String linha;
+            while (modelo.hasNextLine()) {
+                linha = modelo.nextLine();
+                if (linha.equals("{dados-vendas-por-vendedor}")==true) {
+
+                    for (RegistroVenda item : itens){
+                        //String valorRS = new DecimalFormat("R$ #,###.00").format(item.valor);
+                        escreve.append("<tr>\n" + 
+                            "<td>"+item.vendedor+"</td>" + 
+                            "<td>"+item.valor+"</td>" + 
+                            "<td>"+item.quantidade+"</td>\n" +
+                            "</tr>\n");
+                    }
+                }else{
+                    escreve.append(linha);
+                }
+            }
+            modelo.close();
+            escreve.close();
+        } catch (Exception e) {
+            System.out.println(Keys.alertas.erro_inesperado);
+        }
+        return Keys.alertas.msg_relatorio_gerado_com_sucesso;
+    }
 
     public String ErroException(String msg, Exception e){
         String alert = msg + "\n#Error: " + e.getMessage();
