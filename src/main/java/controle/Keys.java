@@ -15,7 +15,7 @@ public class Keys {
 
     public static class files{
         public static final String EstoqueBD = "bd/EstoqueBD.chup";
-        public static final String Relatorio_html = "models/modelo.html";
+        public static final String Relatorio_html = "relatorio.html";
         public static final String GuardaVendasBD = "bd/GuardaVendasBD.chup";
         public static final String Modelo_relatorio_html = "models/modelo.html";
     }
