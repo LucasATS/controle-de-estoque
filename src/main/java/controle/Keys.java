@@ -1,5 +1,8 @@
 package controle;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class Keys {
     public static class alertas{
         public static final String msg_venda_realizada = "Venda realizada com Sucesso.";
@@ -14,9 +17,12 @@ public class Keys {
     }
 
     public static class files{
+        private static Path currentRelativePath = Paths.get("");
         public static final String EstoqueBD = "bd/EstoqueBD.chup";
         public static final String Relatorio_html = "relatorio.html";
         public static final String GuardaVendasBD = "bd/GuardaVendasBD.chup";
         public static final String Modelo_relatorio_html = "models/modelo.html";
+        public static final String telaVenda_css= "CSS\\telaVenda.css";
+        public static final String camninholocal = currentRelativePath.toAbsolutePath().toString()+"\\";
     }
 }

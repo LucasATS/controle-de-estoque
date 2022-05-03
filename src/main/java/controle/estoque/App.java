@@ -1,22 +1,29 @@
 package controle.estoque;
 
-import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+import java.util.ArrayList;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.GridPane;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.geometry.Pos;
 
@@ -56,7 +63,7 @@ public class App extends Application {
         tituloTabela.setLayoutX(10);
         tituloTabela.setLayoutY(80);
 
-        Scene sc = new Scene(painel,650,250);
+        Scene sc = new Scene(painel,900,700);
 
         painel.getChildren().add(tituloTabela);
         painel.getChildren().add(tabelaNomes);
@@ -115,7 +122,7 @@ public class App extends Application {
         btn_adicionar.setLayoutX(70);
         btn_adicionar.setLayoutY(160);
         
-        Scene sc = new Scene(painel,650,250);
+        Scene sc = new Scene(painel,900,700);
 
         painel.getChildren().add(menu);
         painel.getChildren().add(lb_nome);
@@ -167,7 +174,7 @@ public class App extends Application {
         btn_deletar.setLayoutY(80);
 
         
-        Scene sc = new Scene(painel,650,250);
+        Scene sc = new Scene(painel,900,700);
 
         painel.getChildren().add(menu);
         painel.getChildren().add(lb_nome);
@@ -226,7 +233,7 @@ public class App extends Application {
         btn_add.setLayoutX(70);
         btn_add.setLayoutY(120);
 
-        Scene sc = new Scene(painel,650,250);
+        Scene sc = new Scene(painel,900,700);
 
         painel.getChildren().add(menu);
         painel.getChildren().add(lb_nome);
@@ -288,7 +295,7 @@ public class App extends Application {
         btn_salva.setLayoutX(70);
         btn_salva.setLayoutY(120);
 
-        Scene sc = new Scene(painel,650,250);
+        Scene sc = new Scene(painel,900,700);
 
         painel.getChildren().add(menu);
         painel.getChildren().add(lb_nome);
@@ -299,99 +306,11 @@ public class App extends Application {
 
         stage.setScene(sc);
     }
-    public void telaVenda(Stage stage){
-        Pane painel = new Pane();
-        ToolBar menu = cria_barraMenu(stage);
-
-        ArrayList<RegistroVenda> listVenda = new ArrayList<RegistroVenda>();
-        
-        String itens[] = new String[estoque.quantItens()];
-        for (int i=0; i< estoque.quantItens();i++){
-            itens[i] = estoque.itens[i].nome;
-        }
-
-        Label lb_nome = new Label("Escolha um produto: ");
-        Label lb_quantidade = new Label("Escolha Quantidade: ");
-        Label lb_valor = new Label("Valor: ");
-
-        ComboBox vendedor = new ComboBox<>(
-            FXCollections.observableArrayList(alunos)
-        );
-
-        ComboBox produto = new ComboBox<>(
-            FXCollections.observableArrayList(alunos)
-        );
-
-        TextField tb_quantidade = new TextField();
-        TextField tb_valor = new TextField();
-        Button btn_adicionar = new Button("+");
-
-        TableView carrinho = new TableView<>();
-
-        TableColumn<String, String> col1 = 
-        new TableColumn<>();
-        
     
-        TableColumn<Button, Button> col2 = 
-        new TableColumn<>();
-
-        carrinho.getColumns().add(col1);
-        carrinho.getColumns().add(col2);
-
-        btn_adicionar.setOnAction(evento ->{
-            
-            listVenda.add(new RegistroVenda(
-                produto.getValue().toString(),
-                vendedor.getValue().toString(), 
-                Integer.parseInt(tb_quantidade.getText()), 
-                Double.parseDouble(tb_valor.getText().replace(",", "."))
-            ));
-            carrinho.getItems().clear();
-            for (RegistroVenda item : listVenda) {
-                carrinho.getItems().add(
-                    item.nome + " " +
-                    item.quantidade + " " +
-                    item.valor + " " +
-                    (item.quantidade * item.valor),
-                    ""
-                );   
-            }
-        });
-
-        lb_nome.setLayoutX(10);
-        lb_nome.setLayoutY(40);
-
-        lb_quantidade.setLayoutX(10);
-        lb_quantidade.setLayoutY(80);
-
-        lb_valor.setLayoutX(10);
-        lb_valor.setLayoutY(120);
-
-        tb_quantidade.setLayoutX(100);
-        tb_quantidade.setLayoutY(80);
-
-        tb_valor.setLayoutX(100);
-        tb_valor.setLayoutY(120);
-
-        btn_adicionar.setLayoutX(70);
-        btn_adicionar.setLayoutY(160);
-        
-        Scene sc = new Scene(painel,650,250);
-
-        painel.getChildren().add(menu);
-        painel.getChildren().add(lb_nome);
-        painel.getChildren().add(lb_quantidade);
-        painel.getChildren().add(lb_valor);
-        painel.getChildren().add(tb_quantidade);
-        painel.getChildren().add(tb_valor);
-        painel.getChildren().add(btn_adicionar);
-
-        stage.setScene(sc);
-    }
-
     public ToolBar cria_barraMenu(Stage stage){
 
         Button btn_principal = new Button("Inicio");
+        Button btn_novaVenda = new Button("Nova Venda");
         Button btn_novoItem = new Button("Novo Item");
         Button btn_delItem = new Button("Deletar Item");
         Button btn_addAoItem = new Button("Adicionar quantidade ao Item");
@@ -400,6 +319,7 @@ public class App extends Application {
 
         ToolBar toolbar = new ToolBar();
         toolbar.getItems().add(btn_principal);
+        toolbar.getItems().add(btn_novaVenda);
         toolbar.getItems().add(btn_novoItem);
         toolbar.getItems().add(btn_delItem);
         toolbar.getItems().add(btn_addAoItem);
@@ -422,6 +342,7 @@ public class App extends Application {
         });
         btn_geraHTML.setOnAction(evento ->{
             String r1, r2, retorno;
+            retorno = "";
             r1 = guardaVenda.geraHTML();
             r2 = estoque.geraHTML();
             if(r1 == r2) retorno = r2;           
@@ -434,7 +355,10 @@ public class App extends Application {
             
             tela_Principal(stage);
         });
-
+        btn_novaVenda.setOnAction(evento ->{
+            telaVenda venda = new telaVenda();
+            venda.view(stage);
+        });
         toolbar.setLayoutX(0);
         toolbar.setLayoutY(0);
 
@@ -497,7 +421,6 @@ public class App extends Application {
         tabela.setLayoutY(100);
         return tabela;                
     }
-    
     public static void main(String[] args) {
         launch();
     }

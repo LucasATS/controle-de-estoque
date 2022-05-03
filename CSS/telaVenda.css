@@ -1,0 +1,54 @@
+#vendedor{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-min-width: 200px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
+}
+#produto{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-min-width: 200px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
+}
+#tb_quantidade{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-min-width: 80px;
+    -fx-pref-width: 80px;
+    -fx-max-width: 80px;
+}
+#tb_valor{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+}
+#btn_adicionar{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-min-width: 40px;
+    -fx-pref-width: 40px;
+    -fx-max-width: 40px;
+}
+#carrinho{
+
+}

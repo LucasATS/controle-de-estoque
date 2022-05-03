@@ -1,25 +1,25 @@
-<html>    <style>        body{            background-color: #C4C4C4;        }        table{            position: absolute;            top: 5%;            width: 50%;            left: 25%;            border-radius: 20px;            font-family: 'Trebuchet MS';            text-align: center;        }        th{            background-color: #000000;            color: #FFFFFF;            border: 2px;        }        td{            background-color: #FFFFFF;            color: #000000;            border: 2px;            border: 1px;        }    </style>    <body>        <table>            <thead>                <tr>                    <th>Nome</th><th>Valor</th><th>Quantidade</th>                </tr>            </thead>            <tbody>                <tr>
-                   <td>uva</td><td>R$ 18,90</td><td>10</td>
-               </tr>
-                <tr>
-                   <td>limao</td><td>R$ 5,01</td><td>10</td>
-               </tr>
-                <tr>
-                   <td>banana</td><td>R$ 3,99</td><td>25</td>
-               </tr>
-                <tr>
-                   <td>laranja</td><td>R$ 5,80</td><td>25</td>
-               </tr>
-                <tr>
-                   <td>abacaxi</td><td>R$ 12,99</td><td>15</td>
-               </tr>
-                <tr>
-                   <td>Uva verde</td><td>R$ 14,50</td><td>3</td>
-               </tr>
-                <tr>
-                   <td>Tomate maduro</td><td>R$ 4,99</td><td>70</td>
-               </tr>
-                <tr>
-                   <td>Pera</td><td>R$ 5,00</td><td>12</td>
-               </tr>
-            </tbody>        </table>    </body></html>
+<html>    <style>        h2{            justify-content: center;             align-items: center;              font-family: 'Arial';            text-align: center;            color: #202020;        }        body{            background-color: #d4d4d4;        }        table{            width: 100%;            border-radius: 20px;            font-family: 'Trebuchet MS';            text-align: center;            filter: drop-shadow(0 0 1.25rem #707070);        }        th{            background-color: #202020;            color: #FFFFFF;            border: 2px;            border-radius: 3px 3px 3px 3px;        }        td{            background-color: #FFFFFF;            color: #202020;            border: 2px;            border-radius: 3px 3px 3px 3px;        }    </style>    <body>        <div>            <h2>RELATÓRIO - QUITANDA</h2>        </div>        <div style="display: flex; flex-direction: column; align-items: center;">        <!--TABELA DE VENDAS-->        <div style="width: 50%; padding-bottom: 80px;">        <table class="table1">            <thead>                <tr>                    <th colspan="3">TABELA DE ESTOQUE</th>                </tr>                <tr>                    <th>Nome</th><th>Valor</th><th>Quantidade</th>                </tr>            </thead>            <tbody><tr>
+<td>uva</td><td>R$ 18,90</td><td>10</td>
+</tr>
+<tr>
+<td>limao</td><td>R$ 5,01</td><td>10</td>
+</tr>
+<tr>
+<td>banana</td><td>R$ 3,99</td><td>25</td>
+</tr>
+<tr>
+<td>laranja</td><td>R$ 5,80</td><td>25</td>
+</tr>
+<tr>
+<td>abacaxi</td><td>R$ 12,99</td><td>15</td>
+</tr>
+<tr>
+<td>Uva verde</td><td>R$ 14,50</td><td>3</td>
+</tr>
+<tr>
+<td>Tomate maduro</td><td>R$ 4,99</td><td>70</td>
+</tr>
+<tr>
+<td>Pera</td><td>R$ 5,00</td><td>12</td>
+</tr>
+            </tbody>        </table>        </div>        <!--TABELA DE VENDAS POR VENDEDOR-->        <div style="width: 50%">        <table class="table2">            <thead>                <tr>                    <th colspan="3">VENDAS POR VENDEDOR</th>                </tr>                <tr>                    <th>Vendedor</th><th>Quantidade</th><th>Valor Total</th>                </tr>            </thead>            <tbody>{dados-vendas-por-vendedor}            </tbody>        </table>        </div>        </div>            </body></html>
