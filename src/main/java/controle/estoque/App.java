@@ -1,28 +1,16 @@
 package controle.estoque;
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import java.util.ArrayList;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import java.io.IOException;
 import javafx.geometry.Pos;
@@ -34,7 +22,7 @@ public class App extends Application {
 
     public Aluno[] alunos = new Aluno[]{
         new Aluno("Bárbara Marcheti Fiorin", "2021101634","N30"),
-        new Aluno("Gabriel Espinoza de Souza","2022103060","N20"),
+        new Aluno("Gabriela Espinoza de Souza","2022103060","N20"),
         new Aluno("Lucas Almeida Tiburtino da Silva", "2021101577","N30"),
         new Aluno("Matheus Fernandes de Figueiredo", "2021101596","N30"),
         new Aluno("Raylla do Sol Dias", "2021101569","N30"),
@@ -147,7 +135,7 @@ public class App extends Application {
         }
         
         Label lb_nome = new Label("Produto: ");
-        ComboBox cb_nome =new ComboBox<>(FXCollections.observableArrayList(itens));
+        ComboBox<String> cb_nome =new ComboBox<>(FXCollections.observableArrayList(itens));
 
         Button btn_deletar = new Button("Deletar");
 
@@ -195,7 +183,7 @@ public class App extends Application {
         }
         
         Label lb_nome = new Label("Produto: ");
-        ComboBox cb_nome =new ComboBox<>(
+        ComboBox<String> cb_nome =new ComboBox<>(
             FXCollections.observableArrayList(itens)
         );
         Label lb_quantidade = new Label("Adicionar +: ");
@@ -256,7 +244,7 @@ public class App extends Application {
         }
         
         Label lb_nome = new Label("Produto: ");
-        ComboBox cb_nome =new ComboBox<>(
+        ComboBox<String> cb_nome =new ComboBox<>(
             FXCollections
             .observableArrayList(itens)
         );

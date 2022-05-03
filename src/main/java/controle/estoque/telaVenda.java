@@ -1,12 +1,8 @@
 package controle.estoque;
 
-import javafx.application.Application;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -16,22 +12,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.GridPane;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.NumberFormat.Style;
 import controle.Keys;
-import javafx.geometry.Pos;
 
 public class telaVenda extends App {
 
@@ -78,15 +65,10 @@ public class telaVenda extends App {
         TableColumn<CacheVenda, String> col1 = new TableColumn<>();
         col1.setCellValueFactory(new PropertyValueFactory<>("str"));
 
-        
-
         carrinho.getColumns().addAll(col1);
 
         buttonRemove();
         
-
-        
-
         btn_adicionar.setOnAction(evento ->{
             
             listVenda.add(new CacheVenda(
