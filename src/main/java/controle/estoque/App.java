@@ -13,6 +13,9 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import java.io.IOException;
+import controle.estoque.Gera_html;
+
+import controle.Keys;
 import javafx.geometry.Pos;
 
 public class App extends Application {
@@ -51,7 +54,8 @@ public class App extends Application {
         tituloTabela.setLayoutX(10);
         tituloTabela.setLayoutY(80);
 
-        Scene sc = new Scene(painel,900,700);
+        Scene sc = new Scene(painel,810,675);
+        sc.getStylesheets().add(getClass().getResource(Keys.files.styles_css).toExternalForm());
 
         painel.getChildren().add(tituloTabela);
         painel.getChildren().add(tabelaNomes);
@@ -110,7 +114,8 @@ public class App extends Application {
         btn_adicionar.setLayoutX(70);
         btn_adicionar.setLayoutY(160);
         
-        Scene sc = new Scene(painel,900,700);
+        Scene sc = new Scene(painel,810,675);
+        sc.getStylesheets().add(getClass().getResource(Keys.files.styles_css).toExternalForm());
 
         painel.getChildren().add(menu);
         painel.getChildren().add(lb_nome);
@@ -162,7 +167,8 @@ public class App extends Application {
         btn_deletar.setLayoutY(80);
 
         
-        Scene sc = new Scene(painel,900,700);
+        Scene sc = new Scene(painel,810,675);
+        sc.getStylesheets().add(getClass().getResource(Keys.files.styles_css).toExternalForm());
 
         painel.getChildren().add(menu);
         painel.getChildren().add(lb_nome);
@@ -221,7 +227,8 @@ public class App extends Application {
         btn_add.setLayoutX(70);
         btn_add.setLayoutY(120);
 
-        Scene sc = new Scene(painel,900,700);
+        Scene sc = new Scene(painel,810,675);
+        sc.getStylesheets().add(getClass().getResource(Keys.files.styles_css).toExternalForm());
 
         painel.getChildren().add(menu);
         painel.getChildren().add(lb_nome);
@@ -283,7 +290,8 @@ public class App extends Application {
         btn_salva.setLayoutX(70);
         btn_salva.setLayoutY(120);
 
-        Scene sc = new Scene(painel,900,700);
+        Scene sc = new Scene(painel,810,675);
+        sc.getStylesheets().add(getClass().getResource(Keys.files.styles_css).toExternalForm());
 
         painel.getChildren().add(menu);
         painel.getChildren().add(lb_nome);
@@ -329,11 +337,9 @@ public class App extends Application {
             alteraValor(stage);
         });
         btn_geraHTML.setOnAction(evento ->{
-            String r1, r2, retorno;
-            retorno = "";
-            r1 = guardaVenda.geraHTML();
-            r2 = estoque.geraHTML();
-            if(r1 == r2) retorno = r2;           
+            String retorno;
+            retorno = Keys.alertas.msg_relatorio_gerado_com_sucesso;
+            new Gera_html();         
 
             Alert message = new Alert(Alert.AlertType.INFORMATION);
             message.setTitle("Relatório:");

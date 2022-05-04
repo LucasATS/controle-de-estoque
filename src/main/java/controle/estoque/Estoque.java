@@ -1,6 +1,7 @@
 package controle.estoque;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import controle.Keys;
@@ -8,6 +9,7 @@ import controle.Keys;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
+
 
 public class Estoque {
     itemEstoque[] itens = new itemEstoque[0];
@@ -29,6 +31,14 @@ public class Estoque {
         catch (FileNotFoundException e) {
             salvaFile();
         }
+    }
+    itemEstoque getItem (String nome){
+        itemEstoque item;
+        item = null;
+        for (itemEstoque itemEstoque : itens) {
+            if (itemEstoque.nome.equals(nome) == true) item = itemEstoque;
+        }
+        return item;
     }
     void salvaFile(){
         try {
@@ -98,6 +108,11 @@ public class Estoque {
         salvaFile();
         return "Adicionado mais "+nome+" ao estoque.";
     }
+    void diminuiQuantidade(String nome,int quantidade){
+        int indice = indiceDe(nome);
+        this.itens[indice].alteraQuantidade(this.itens[indice].quantidade - quantidade);
+        salvaFile();
+    }
     String alterarValorMedio(String nome,double valor){
         int indice = indiceDe(nome);
         if (indice ==-1){
@@ -107,37 +122,28 @@ public class Estoque {
         salvaFile();
         return "valor do "+nome+" atualizado no estoque.";
     }
-    String geraHTML(){
-
+    ArrayList<String> geraHTML(ArrayList<String> modelo){
+        ArrayList<String> escreve = new ArrayList<String>();
         try {
-            File arquivomodel = new File(Keys.files.Modelo_relatorio_html);
-            Scanner modelo = new Scanner(arquivomodel);
-            File arquivo = new File(Keys.files.Relatorio_html);
-            arquivo.createNewFile();
-            FileWriter escreve = new FileWriter(arquivo,false);
-            String linha;
-            while (modelo.hasNextLine()) {
-                linha = modelo.nextLine();
-                if (linha.equals("{dados-estoque}")==true) {
+            for (String str : modelo) {
+                if (str.equals("{dados-estoque}")==true) {
 
                     for (itemEstoque item : itens){
                         String valorRS = new DecimalFormat("R$ #,###.00").format(item.valor);
-                        escreve.append("<tr>\n" + 
+                        escreve.add("<tr>\n" + 
                             "<td>"+item.nome+"</td>" + 
                             "<td>"+valorRS+"</td>" + 
                             "<td>"+item.quantidade+"</td>\n" +
                             "</tr>\n");
                     }
                 }else{
-                    escreve.append(linha);
+                    escreve.add(str);
                 }
             }
-            modelo.close();
-            escreve.close();
         } catch (Exception e) {
             System.out.println(Keys.alertas.erro_inesperado);
         }
-        return Keys.alertas.msg_relatorio_gerado_com_sucesso;
+        return escreve;
     }
 
     public String ErroException(String msg, Exception e){

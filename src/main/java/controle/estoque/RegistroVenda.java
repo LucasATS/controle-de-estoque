@@ -5,14 +5,14 @@ import java.text.DecimalFormat;
 public class RegistroVenda {
 
     private String nome, vendedor, str;
-    private int quantidade;
+    private int id, quantidade;
     private double valor;
     
-    public RegistroVenda(String nome, String vendedor, int quantidade, double valor){
+    public RegistroVenda(int id, String nome, String vendedor, int quantidade, double valor){
         this.nome = nome;
         this.quantidade = quantidade;
         this.valor = valor;
-
+        this.id = id;
         String valorRS = new DecimalFormat("R$ #,###.00").format(valor);
         String valorRS_total = new DecimalFormat("R$ #,###.00").format(quantidade * valor);
 
@@ -32,6 +32,12 @@ public class RegistroVenda {
         }
         
         this.vendedor = vendedor;
+    }
+    public int getId(){
+        return id;
+    }
+    public void setId(int id){
+        this.id = id;
     }
     public String getNome() {
         return nome;

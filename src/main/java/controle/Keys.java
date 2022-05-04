@@ -20,5 +20,6 @@ public class Keys {
         public static final String GuardaVendasBD = "bd/GuardaVendasBD.chup";
         public static final String Modelo_relatorio_html = "models/modelo.html";
         public static final String telaVenda_css= "CSS/telaVenda.css";
+        public static final String styles_css= "CSS/styles.css";
     }
 }

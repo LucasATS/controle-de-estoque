@@ -1,6 +1,7 @@
 package controle.estoque;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import controle.Keys;
@@ -8,9 +9,12 @@ import controle.Keys.files;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.text.DecimalFormat;
 
 public class GuardaVendas {
     RegistroVenda[] itens = new RegistroVenda[0];
+    Estoque estoque = new Estoque();
+
     GuardaVendas(){
         try {
             File arquivo = new File(files.GuardaVendasBD);
@@ -19,7 +23,10 @@ public class GuardaVendas {
 
             while (GuardaVendasBD.hasNextLine()) {
                 String[] dados = GuardaVendasBD.nextLine().split(";");
-                novaVenda(dados[0], dados[1], Integer.parseInt(dados[2]), Double.parseDouble(dados[3]));
+                RegistroVenda registro = new RegistroVenda(
+                    Integer.parseInt(dados[0]), dados[1], dados[2], Integer.parseInt(dados[3]), Double.parseDouble(dados[4])
+                );
+                carrega(registro);
             }
 
             GuardaVendasBD.close();
@@ -34,7 +41,7 @@ public class GuardaVendas {
             arquivo.createNewFile();
             FileWriter escreve = new FileWriter(arquivo,false);
             for (RegistroVenda item : itens){
-                escreve.append(item.getNome() + ";" + item.getVendedor() + ";" + item.getQtd() + ";" + item.getValor() + "\n");
+                escreve.append(item.getId() + ";" + item.getNome() + ";" + item.getVendedor() + ";" + item.getQtd() + ";" + item.getValor() + "\n");
             }
             escreve.close();
         }
@@ -42,7 +49,14 @@ public class GuardaVendas {
             ErroException(Keys.alertas.erro_inesperado, e);
         }
     }
-    String novaVenda(String nome, String vendedor, int quantidade, double valor){
+    int novaId(){
+        int new_id = 0;
+        for (RegistroVenda registroVenda : itens) {
+            if (registroVenda.getId()>new_id) new_id=registroVenda.getId();
+        }
+        return new_id + 1;
+    }
+    void carrega(RegistroVenda registro){
         RegistroVenda[] armazena = this.itens.clone();
         int quantidadeAtual = this.itens.length;
         this.itens = new RegistroVenda[quantidadeAtual+1];
@@ -53,41 +67,67 @@ public class GuardaVendas {
             i++;
         }
 
-        this.itens[i] = new RegistroVenda(nome, vendedor, quantidade, valor);
+        this.itens[i] = registro;
+        salvaFile();
+    }
+    String novaVenda(RegistroVenda registro){
+        RegistroVenda[] armazena = this.itens.clone();
+        estoque.diminuiQuantidade(registro.getNome(), registro.getQtd());
+        int quantidadeAtual = this.itens.length;
+        this.itens = new RegistroVenda[quantidadeAtual+1];
+        int i = 0 ;
+
+        for (RegistroVenda item: armazena){
+            this.itens[i]=item;
+            i++;
+        }
+
+        this.itens[i] = registro;
         salvaFile();
         
         return Keys.alertas.msg_venda_realizada;
     }
-    String geraHTML(){
+    String deletaRegistro(int id){
+        RegistroVenda[] armazena = this.itens.clone();
+        int len = 0;
+        for (RegistroVenda registroVenda : armazena) {
+            if (id==registroVenda.getId()) len++;
+        }
+        int quantidadeAtual = this.itens.length;
+        this.itens = new RegistroVenda[quantidadeAtual-len];
+        int i=0;
+        for (RegistroVenda item : armazena){
+            if (item!=null){
+                this.itens[i]=item;
+                i++;
+            }
+        }
+        salvaFile();
+        return Keys.alertas.msg_item_rmv_com_sucesso;
+    }
+    ArrayList<String> geraHTML(ArrayList<String> modelo){
+        
+        ArrayList<String> escreve = new ArrayList<String>();
         try {
-            File arquivomodel = new File(Keys.files.Modelo_relatorio_html);
-            Scanner modelo = new Scanner(arquivomodel);
-            File arquivo = new File(Keys.files.Relatorio_html);
-            arquivo.createNewFile();
-            FileWriter escreve = new FileWriter(arquivo,false);
-            String linha;
-            while (modelo.hasNextLine()) {
-                linha = modelo.nextLine();
-                if (linha.equals("{dados-vendas-por-vendedor}")==true) {
+            for (String str : modelo) {
+                if (str.equals("{dados-vendas-por-vendedor}")==true) {
 
                     for (RegistroVenda item : itens){
-                        //String valorRS = new DecimalFormat("R$ #,###.00").format(item.valor);
-                        escreve.append("<tr>\n" + 
-                            "<td>"+item.getVendedor()+"</td>" + 
-                            "<td>"+item.getValor()+"</td>" + 
-                            "<td>"+item.getQtd()+"</td>\n" +
-                            "</tr>\n");
+                        String valorRS = new DecimalFormat("R$ #,###.00").format(item.getValor());
+                        escreve.add("<tr>\n" + 
+                        "<td>"+item.getVendedor()+"</td>" + 
+                        "<td>"+valorRS+"</td>" + 
+                        "<td>"+item.getQtd()+"</td>\n" +
+                        "</tr>\n");
                     }
                 }else{
-                    escreve.append(linha);
+                    escreve.add(str);
                 }
             }
-            modelo.close();
-            escreve.close();
         } catch (Exception e) {
             System.out.println(Keys.alertas.erro_inesperado);
         }
-        return Keys.alertas.msg_relatorio_gerado_com_sucesso;
+        return escreve;
     }
 
     public String ErroException(String msg, Exception e){

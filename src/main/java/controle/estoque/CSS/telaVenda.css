@@ -95,7 +95,9 @@
     -fx-text-fill: black;
     -fx-text-alignment: center;
 }
-
+.table-view .table-column {
+    -fx-alignment: center;
+}
 .table-cell { 
     -fx-border-style : none;
     -fx-background-color: white;
@@ -116,12 +118,15 @@
     -fx-max-width: 310px;
 }
 #colBtn{
-    -fx-min-width: 120px;
-    -fx-pref-width: 120px;
-    -fx-max-width: 120px;
+    -fx-min-width: 110px;
+    -fx-pref-width: 110px;
+    -fx-max-width: 110px;
 }
 #registrarVenda{
     -fx-min-width: 300px;
     -fx-pref-width: 300px;
     -fx-max-width: 300px;
+}
+.combo-box{
+    -fx-cursor: hand;
 }

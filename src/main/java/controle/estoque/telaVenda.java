@@ -12,7 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import java.util.ArrayList;
-
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ToolBar;
@@ -23,10 +23,13 @@ import controle.Keys;
 public class telaVenda extends App {
 
     // table view de produtos sendo vendidos
+    private final GuardaVendas vendas = new GuardaVendas();
+    private final Estoque estoque = new Estoque();
     private final TableView<RegistroVenda> carrinho = new TableView<>();
     private final TableView<RegistroVenda> visCupon = new TableView<>();
     private final ObservableList<RegistroVenda> cacheVenda = FXCollections.observableArrayList();
     private final ObservableList<RegistroVenda> listCupon = FXCollections.observableArrayList();
+    private int idVenda = vendas.novaId();
 
     public void view(Stage stage){
         Pane painel = new Pane();
@@ -96,6 +99,16 @@ public class telaVenda extends App {
         visCupon.getColumns().addAll(colTitle);
         buttonRemove();
         
+
+        // Event seleciona produto
+        produto.setOnAction(evento ->{
+            double valor = estoque.getItem(produto.getValue().toString()).valor;
+            try {
+                tb_valor.setText(String.valueOf(valor));
+            } catch (Exception e) {
+                tb_valor.setText("0.0");
+            }
+        });
         // Event click button +
         btn_adicionar.setOnAction(evento ->{
             if ((produto.getValue() != null && vendedor.getValue() != null && 
@@ -104,14 +117,46 @@ public class telaVenda extends App {
                 if (produto.getValue().toString() != "" && vendedor.getValue().toString() != "" && 
                 tb_quantidade.getText() != "" && tb_valor.getText() != ""){
                     cacheVenda.add(new RegistroVenda(
+                        idVenda,
                         produto.getValue().toString(),
                         vendedor.getValue().toString(), 
                         Integer.parseInt(tb_quantidade.getText()), 
                         Double.parseDouble(tb_valor.getText().replace(",", "."))
                     ));
+                    produto.setValue(null);
+                    tb_quantidade.setText(null); 
+                    tb_valor.setText(null);
                     geraCupon();
                 }
             }
+        });
+
+        // Event click button registrarVenda
+        registrarVenda.setOnAction(evento ->{
+            String retorno = "Selecione pelo menos um produto";
+            for (RegistroVenda venda : cacheVenda) {
+                if (vendas.novaVenda(venda)==Keys.alertas.msg_venda_realizada){
+                    retorno = Keys.alertas.msg_venda_realizada;
+                }else{
+                    vendas.deletaRegistro(idVenda);
+                    retorno = Keys.alertas.erro_inesperado;
+                }
+            }
+            idVenda = vendas.novaId();
+            vendedor.setValue(null);
+            produto.setValue(null);
+            vendedor.setValue(null);
+            tb_quantidade.setText(null); 
+            tb_valor.setText(null);
+            cacheVenda.clear();
+            listCupon.clear();
+
+            Alert message = new Alert(Alert.AlertType.INFORMATION);
+            message.setTitle("Registro de Venda:");
+            message.setHeaderText("Resultado:");
+            message.setContentText(retorno);
+            message.showAndWait();
+
         });
 
 
@@ -141,7 +186,7 @@ public class telaVenda extends App {
 
         ocultaHeader();
         
-        Scene sc = new Scene(painel,900,700);
+        Scene sc = new Scene(painel,810,675);
         sc.getStylesheets().add(getClass().getResource(Keys.files.telaVenda_css).toExternalForm());
         painel.getChildren().add(menu);
         painel.getChildren().add(vendedor);
@@ -213,7 +258,7 @@ public class telaVenda extends App {
             }
         }
         if (indice != -1) listCupon.remove(indice);
-        listCupon.add(new RegistroVenda("total","total", 0, soma));
+        listCupon.add(new RegistroVenda(-1,"total","total", 0, soma));
     }
 
 }
