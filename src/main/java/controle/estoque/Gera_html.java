@@ -1,6 +1,5 @@
 package controle.estoque;
 
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ public class Gera_html {
             arquivo.createNewFile();
             FileWriter novo_item = new FileWriter(arquivo,false);
             for (String string : modelo) {
-                System.out.println(string);
                 novo_item.append(string);
             }
             model.close();

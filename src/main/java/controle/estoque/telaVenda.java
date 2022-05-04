@@ -102,8 +102,8 @@ public class telaVenda extends App {
 
         // Event seleciona produto
         produto.setOnAction(evento ->{
-            double valor = estoque.getItem(produto.getValue().toString()).valor;
             try {
+                double valor = estoque.getItem(produto.getValue().toString()).valor;
                 tb_valor.setText(String.valueOf(valor));
             } catch (Exception e) {
                 tb_valor.setText("0.0");
@@ -200,7 +200,7 @@ public class telaVenda extends App {
         stage.setScene(sc);
     }
     private void buttonRemove() {
-        TableColumn<RegistroVenda, Void> colBtn = new TableColumn();
+        TableColumn<RegistroVenda, Void> colBtn = new TableColumn<>();
 
         Callback<TableColumn<RegistroVenda, Void>, TableCell<RegistroVenda, Void>> cellFactory = new Callback<TableColumn<RegistroVenda, Void>, TableCell<RegistroVenda, Void>>() {
             @Override

@@ -13,7 +13,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import java.io.IOException;
-import controle.estoque.Gera_html;
 
 import controle.Keys;
 import javafx.geometry.Pos;
