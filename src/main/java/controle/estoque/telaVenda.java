@@ -12,6 +12,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
@@ -94,9 +96,9 @@ public class telaVenda extends App {
         TableColumn<RegistroVenda, String> colSubTitle = new TableColumn<>("PROD | QTD | VALOR.Ú | VALOR.T");
 
         colSubTitle.setCellValueFactory(new PropertyValueFactory<>("str"));
-        carrinho.getColumns().addAll(col1);
-        colTitle.getColumns().addAll(colSubTitle);
-        visCupon.getColumns().addAll(colTitle);
+        carrinho.getColumns().addAll(Arrays.asList(col1));
+        colTitle.getColumns().addAll(Arrays.asList(colSubTitle));
+        visCupon.getColumns().addAll(Arrays.asList(colTitle));
         buttonRemove();
         
 
