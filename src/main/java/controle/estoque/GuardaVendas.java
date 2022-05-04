@@ -115,9 +115,9 @@ public class GuardaVendas {
                     for (RegistroVenda item : itens){
                         String valorRS = new DecimalFormat("R$ #,###.00").format(item.getValor());
                         escreve.add("<tr>\n" + 
-                        "<td>"+item.getVendedor()+"</td>" + 
-                        "<td>"+valorRS+"</td>" + 
+                        "<td>"+item.getVendedor()+"</td>" +
                         "<td>"+item.getQtd()+"</td>\n" +
+                        "<td>"+valorRS+"</td>" + 
                         "</tr>\n");
                     }
                 }else{
