@@ -25,7 +25,7 @@ public class GuardaVendas {
             GuardaVendasBD.close();
         } 
         catch (FileNotFoundException e) {
-            ErroException(Keys.alertas.erro_arquivo_nao_encontrado, e);
+            salvaFile();
         }
     }
     void salvaFile(){
@@ -34,7 +34,7 @@ public class GuardaVendas {
             arquivo.createNewFile();
             FileWriter escreve = new FileWriter(arquivo,false);
             for (RegistroVenda item : itens){
-                escreve.append(item.nome + ";" + item.vendedor + ";" + item.quantidade + ";" + item.valor + "\n");
+                escreve.append(item.getNome() + ";" + item.getVendedor() + ";" + item.getQtd() + ";" + item.getValor() + "\n");
             }
             escreve.close();
         }
@@ -73,9 +73,9 @@ public class GuardaVendas {
                     for (RegistroVenda item : itens){
                         //String valorRS = new DecimalFormat("R$ #,###.00").format(item.valor);
                         escreve.append("<tr>\n" + 
-                            "<td>"+item.vendedor+"</td>" + 
-                            "<td>"+item.valor+"</td>" + 
-                            "<td>"+item.quantidade+"</td>\n" +
+                            "<td>"+item.getVendedor()+"</td>" + 
+                            "<td>"+item.getValor()+"</td>" + 
+                            "<td>"+item.getQtd()+"</td>\n" +
                             "</tr>\n");
                     }
                 }else{

@@ -1,0 +1,127 @@
+#vendedor{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-min-width: 200px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
+}
+#produto{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-min-width: 200px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
+}
+#tb_quantidade{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-min-width: 80px;
+    -fx-pref-width: 80px;
+    -fx-max-width: 80px;
+}
+#tb_valor{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-min-width: 80px;
+    -fx-pref-width: 80px;
+    -fx-max-width: 80px;
+}
+#btn_adicionar{
+    -fx-min-width: 40px;
+    -fx-pref-width: 40px;
+    -fx-max-width: 40px;
+}
+.button{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+#carrinho{
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+.table-view {
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-text-alignment: center;
+}
+#visCupon{
+    -fx-font-size: 14px;
+    
+}
+#visCupon .column-header{
+    -fx-background-color : white;
+}
+.scroll-bar{
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+}
+.table-row-cell:odd{
+    -fx-background-color: white;
+    -fx-border-color : white;
+    -fx-text-fill: black;
+    -fx-text-alignment: center;
+}
+.table-row-cell{
+    -fx-background-color: white;
+    -fx-border-style : none;
+    -fx-text-fill: black;
+    -fx-text-alignment: center;
+}
+
+.table-cell { 
+    -fx-border-style : none;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-text-alignment: center;
+}
+.table-row-cell:odd highlighted{
+    -fx-border-style : none;
+    -fx-text-fill: black;
+}
+.table-row-cell:highlighted {
+    -fx-border-style : none;
+    -fx-text-fill: black;
+}
+#col1{
+    -fx-min-width: 310px;
+    -fx-pref-width: 310px;
+    -fx-max-width: 310px;
+}
+#colBtn{
+    -fx-min-width: 120px;
+    -fx-pref-width: 120px;
+    -fx-max-width: 120px;
+}
+#registrarVenda{
+    -fx-min-width: 300px;
+    -fx-pref-width: 300px;
+    -fx-max-width: 300px;
+}

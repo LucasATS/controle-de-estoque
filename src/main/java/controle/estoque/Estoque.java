@@ -27,7 +27,7 @@ public class Estoque {
             estoqueBD.close();
         } 
         catch (FileNotFoundException e) {
-            ErroException(Keys.alertas.erro_arquivo_nao_encontrado, e);
+            salvaFile();
         }
     }
     void salvaFile(){

@@ -23,13 +23,17 @@ import controle.Keys;
 public class telaVenda extends App {
 
     // table view de produtos sendo vendidos
-    private final TableView<CacheVenda> carrinho = new TableView<>();
-    private final ObservableList<CacheVenda> listVenda = FXCollections.observableArrayList();
+    private final TableView<RegistroVenda> carrinho = new TableView<>();
+    private final TableView<RegistroVenda> visCupon = new TableView<>();
+    private final ObservableList<RegistroVenda> cacheVenda = FXCollections.observableArrayList();
+    private final ObservableList<RegistroVenda> listCupon = FXCollections.observableArrayList();
 
     public void view(Stage stage){
         Pane painel = new Pane();
         ToolBar menu = cria_barraMenu(stage);
-    
+
+        carrinho.setId("carrinho");
+        visCupon.setId("visCupon");
 
         //itens de estoque
         String itens[] = new String[estoque.quantItens()];
@@ -39,6 +43,7 @@ public class telaVenda extends App {
         ComboBox<String> produto = new ComboBox<>(
             FXCollections.observableArrayList(itens)
         );
+        produto.setId("produto");
 
 
         //lista de Vendedores (Alunos)
@@ -49,35 +54,64 @@ public class telaVenda extends App {
         ComboBox<String> vendedor = new ComboBox<>(
             FXCollections.observableArrayList(vendedores)
         );
+        vendedor.setId("vendedor");
 
-        // textbox para add quantidade e valor mais o btn +
+
+        // textbox para add quantidade e valor mais os btn's
 
         TextField tb_quantidade = new TextField();
+        tb_quantidade.setId("tb_quantidade");
         TextField tb_valor = new TextField();
+        tb_valor.setId("tb_valor");
         Button btn_adicionar = new Button("+");
+        btn_adicionar.setId("btn_adicionar");
+        Button registrarVenda = new Button("REGISTRAR VENDA");
+        registrarVenda.setId("registrarVenda");
 
+        //Config das Tables
         carrinho.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        carrinho.setPrefWidth(600);
-        carrinho.setPrefHeight(600);
+        carrinho.setPrefWidth(435);
+        carrinho.setPrefHeight(550);
+        visCupon.setEditable(false);
 
-        carrinho.setItems(listVenda);
+        visCupon.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        visCupon.setPrefWidth(300);
+        visCupon.setPrefHeight(595);
+        visCupon.setEditable(false);
 
-        TableColumn<CacheVenda, String> col1 = new TableColumn<>();
+        //Adicionando a Lista
+        carrinho.setItems(cacheVenda);
+        visCupon.setItems(listCupon);
+
+        TableColumn<RegistroVenda, String> col1 = new TableColumn<>();
         col1.setCellValueFactory(new PropertyValueFactory<>("str"));
+        col1.setId("col1");
 
+        TableColumn<RegistroVenda, String> colTitle = new TableColumn<>("QUITANDA");
+        TableColumn<RegistroVenda, String> colSubTitle = new TableColumn<>("PROD | QTD | VALOR.Ú | VALOR.T");
+
+        colSubTitle.setCellValueFactory(new PropertyValueFactory<>("str"));
         carrinho.getColumns().addAll(col1);
-
+        colTitle.getColumns().addAll(colSubTitle);
+        visCupon.getColumns().addAll(colTitle);
         buttonRemove();
         
+        // Event click button +
         btn_adicionar.setOnAction(evento ->{
-            
-            listVenda.add(new CacheVenda(
-                produto.getValue().toString(),
-                vendedor.getValue().toString(), 
-                Integer.parseInt(tb_quantidade.getText()), 
-                Double.parseDouble(tb_valor.getText().replace(",", "."))
-            ));
-            
+            if ((produto.getValue() != null && vendedor.getValue() != null && 
+                tb_quantidade.getText() != null && tb_valor.getText() != null)
+            ){
+                if (produto.getValue().toString() != "" && vendedor.getValue().toString() != "" && 
+                tb_quantidade.getText() != "" && tb_valor.getText() != ""){
+                    cacheVenda.add(new RegistroVenda(
+                        produto.getValue().toString(),
+                        vendedor.getValue().toString(), 
+                        Integer.parseInt(tb_quantidade.getText()), 
+                        Double.parseDouble(tb_valor.getText().replace(",", "."))
+                    ));
+                    geraCupon();
+                }
+            }
         });
 
 
@@ -90,20 +124,25 @@ public class telaVenda extends App {
         tb_quantidade.setLayoutX(215);
         tb_quantidade.setLayoutY(80);
 
-        tb_valor.setLayoutX(295);
+        tb_valor.setLayoutX(300);
         tb_valor.setLayoutY(80);
 
-        btn_adicionar.setLayoutX(375);
+        btn_adicionar.setLayoutX(385);
         btn_adicionar.setLayoutY(80);
 
         carrinho.setLayoutX(10);
         carrinho.setLayoutY(120);
 
+        visCupon.setLayoutX(500);
+        visCupon.setLayoutY(40);
+
+        registrarVenda.setLayoutX(500);
+        registrarVenda.setLayoutY(640);
+
         ocultaHeader();
         
         Scene sc = new Scene(painel,900,700);
-        sc.getStylesheets().add(Keys.files.camninholocal+Keys.files.telaVenda_css);
-        //sc.getStylesheets().add(getClass().getResource(Keys.files.telaVenda_css).toExternalForm());
+        sc.getStylesheets().add(getClass().getResource(Keys.files.telaVenda_css).toExternalForm());
         painel.getChildren().add(menu);
         painel.getChildren().add(vendedor);
         painel.getChildren().add(produto);
@@ -111,26 +150,26 @@ public class telaVenda extends App {
         painel.getChildren().add(tb_valor);
         painel.getChildren().add(btn_adicionar);
         painel.getChildren().add(carrinho);
+        painel.getChildren().add(visCupon);
+        painel.getChildren().add(registrarVenda);
         stage.setScene(sc);
     }
     private void buttonRemove() {
-        TableColumn<CacheVenda, Void> colBtn = new TableColumn();
+        TableColumn<RegistroVenda, Void> colBtn = new TableColumn();
 
-        Callback<TableColumn<CacheVenda, Void>, TableCell<CacheVenda, Void>> cellFactory = new Callback<TableColumn<CacheVenda, Void>, TableCell<CacheVenda, Void>>() {
+        Callback<TableColumn<RegistroVenda, Void>, TableCell<RegistroVenda, Void>> cellFactory = new Callback<TableColumn<RegistroVenda, Void>, TableCell<RegistroVenda, Void>>() {
             @Override
-            public TableCell<CacheVenda, Void> call(final TableColumn<CacheVenda, Void> param) {
-                final TableCell<CacheVenda, Void> cell = new TableCell<CacheVenda, Void>() {
+            public TableCell<RegistroVenda, Void> call(final TableColumn<RegistroVenda, Void> param) {
+                final TableCell<RegistroVenda, Void> cell = new TableCell<RegistroVenda, Void>() {
 
                     
                     private final Button btn = new Button("REMOVER");
                     
                     {
                         btn.setOnAction((ActionEvent event) -> {
-                            System.out.println(getTableView().getItems().get(getIndex()).str);
                             getTableView().getItems().remove(getIndex());
+                            geraCupon();
                         });
-                        btn.setStyle("-fx-background-color: black;"+
-                        "-fx-text-fill: white;");
                     }
 
                     @Override
@@ -146,7 +185,7 @@ public class telaVenda extends App {
                 return cell;
             }
         };
-
+        colBtn.setId("colBtn");
         colBtn.setCellFactory(cellFactory);
         carrinho.getColumns().add(colBtn);
     }
@@ -161,56 +200,20 @@ public class telaVenda extends App {
           header.setVisible(false);
         });
     }
-    public class CacheVenda {
-
-        private String nome, vendedor, str;
-        private int quantidade;
-        private double valor;
-        
-        private CacheVenda(String nome, String vendedor, int quantidade, double valor){
-            this.nome = nome;
-            this.quantidade = quantidade;
-            this.valor = valor;
-    
-            this.str = 
-            nome + " - " +
-            quantidade + " - " +
-            valor + " - " +
-            (quantidade * valor)
-            ;
-            
-            this.vendedor = vendedor;
+    private void geraCupon() {
+        listCupon.clear();
+        listCupon.addAll(cacheVenda);
+        int indice = -1;
+        double soma = 0;
+        for (int i = 0; i < listCupon.size(); i++) {
+            if (listCupon.get(i).getNome()=="total") {
+                indice=i;
+            }else{
+                soma += listCupon.get(i).getValor()*listCupon.get(i).getQtd();
+            }
         }
-        public String getNome() {
-            return nome;
-        }
-
-        public void setNome(String nome) {
-            this.nome = nome;
-        }
-        public String getVendedor() {
-            return vendedor;
-        }
-
-        public void setVendedor(String vendedor) {
-            this.vendedor = vendedor;
-        }
-        public int getQtd() {
-            return quantidade;
-        }
-
-        public void setQtd(int quantidade) {
-            this.quantidade = quantidade;
-        }
-        public Double getValor() {
-            return valor;
-        }
-
-        public void setValor(Double valor) {
-            this.valor = valor;
-        }
-        public String getStr(){
-            return str;
-        }
+        if (indice != -1) listCupon.remove(indice);
+        listCupon.add(new RegistroVenda("total","total", 0, soma));
     }
+
 }
