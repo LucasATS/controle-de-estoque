@@ -1,3 +1,9 @@
+.root{
+    -fx-background-color: white;
+}
+.tool-bar{
+    -fx-background-color: #FFD37F;
+}
 #vendedor{
     -fx-font-weight: bold;
     -fx-border-radius: 6;
