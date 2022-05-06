@@ -24,6 +24,10 @@ public class Gera_html {
             ArrayList<String> escreve = new ArrayList<String>();
             while (model.hasNextLine()) {
                 linha = model.nextLine();
+                if (linha.equals("{Titulo}") == true) {
+                    escreve.add("RELATÓRIO - QUITANDA");
+                    continue;
+                }
                 escreve.add(linha);
             }
 

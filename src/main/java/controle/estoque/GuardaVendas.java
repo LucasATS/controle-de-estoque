@@ -125,6 +125,9 @@ public class GuardaVendas {
 
     String novaVenda(RegistroVenda registro){
         
+        for (SaidaProduto saida : registro.getProdutos()){
+            estoque.diminuiQuantidade(saida.getNome(), saida.getQtd());
+        }
         itens.add(registro);
         salvaFile();
         
