@@ -42,7 +42,7 @@ public class Gera_html {
             Writer novo_item = new BufferedWriter(osw2);
 
             for (String string : modelo) {
-                novo_item.append(string);
+                novo_item.append(string + "\n");
             }
             model.close();
             novo_item.close();
