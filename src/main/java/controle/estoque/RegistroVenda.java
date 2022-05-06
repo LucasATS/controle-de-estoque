@@ -1,37 +1,23 @@
 //RegistoVendas
 package controle.estoque;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class RegistroVenda {
 
-    private String nome, vendedor, str;
-    private int id, quantidade;
+    private int id;
+    private String vendedor;
     private double valor;
-    
-    public RegistroVenda(int id, String nome, String vendedor, int quantidade, double valor){
-        this.nome = nome;
-        this.quantidade = quantidade;
-        this.valor = valor;
+    private ArrayList<SaidaProduto> produtos;
+
+    public RegistroVenda(int id, String vendedor, ArrayList<SaidaProduto> produtos){
         this.id = id;
-        String valorRS = new DecimalFormat("R$ #,###.00").format(valor);
-        String valorRS_total = new DecimalFormat("R$ #,###.00").format(quantidade * valor);
-
-        if (nome=="total"){
-
-            this.str = "VALOR TOTAL....:"+ valorRS;
-
-        }else{
-
-            this.str = 
-            nome + " - " +
-            quantidade + " - " +
-            valorRS + " - " +
-            valorRS_total
-            ;
-
-        }
-        
         this.vendedor = vendedor;
+        this.produtos = produtos;
+
+        for (SaidaProduto produto : produtos){
+            this.valor += produto.getValortotal();
+        }
+
     }
     public int getId(){
         return id;
@@ -39,12 +25,12 @@ public class RegistroVenda {
     public void setId(int id){
         this.id = id;
     }
-    public String getNome() {
-        return nome;
+    public ArrayList<SaidaProduto> getProdutos() {
+        return produtos;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setProdutos(ArrayList<SaidaProduto> produtos) {
+        this.produtos = produtos;
     }
     public String getVendedor() {
         return vendedor;
@@ -53,21 +39,11 @@ public class RegistroVenda {
     public void setVendedor(String vendedor) {
         this.vendedor = vendedor;
     }
-    public int getQtd() {
-        return quantidade;
-    }
-
-    public void setQtd(int quantidade) {
-        this.quantidade = quantidade;
-    }
     public Double getValor() {
         return valor;
     }
 
     public void setValor(Double valor) {
         this.valor = valor;
-    }
-    public String getStr(){
-        return str;
     }
 }

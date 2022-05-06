@@ -18,6 +18,7 @@ public class Keys {
         public static final String EstoqueBD = "bd/EstoqueBD.chup";
         public static final String Relatorio_html = "relatorio.html";
         public static final String GuardaVendasBD = "bd/GuardaVendasBD.chup";
+        public static final String SaidaProdutoBD = "bd/SaidaProdutoBD.chup";
         public static final String Modelo_relatorio_html = "models/modelo.html";
         public static final String telaVenda_css= "CSS/telaVenda.css";
         public static final String styles_css= "CSS/styles.css";

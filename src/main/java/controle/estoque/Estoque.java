@@ -1,5 +1,6 @@
 package controle.estoque;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -7,7 +8,9 @@ import java.util.Scanner;
 import controle.Keys;
 
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.text.DecimalFormat;
 
 
@@ -20,7 +23,7 @@ public class Estoque {
         try {
             File arquivo = new File(Keys.files.EstoqueBD);
 
-            Scanner estoqueBD = new Scanner(arquivo);
+            Scanner estoqueBD = new Scanner(arquivo, "ISO-8859-1");
             while (estoqueBD.hasNextLine()) {
                 String[] dados = estoqueBD.nextLine().split(";");
                 novoItem(dados[0], Integer.parseInt(dados[1]), Double.parseDouble(dados[2]));
@@ -45,7 +48,11 @@ public class Estoque {
             File arquivo = new File(Keys.files.EstoqueBD);
 
             arquivo.createNewFile();
-            FileWriter escreve = new FileWriter(arquivo,false);
+            
+            FileOutputStream fos = new FileOutputStream(arquivo);
+            OutputStreamWriter osw = new OutputStreamWriter(fos, "ISO-8859-1");
+            Writer escreve = new BufferedWriter(osw); 
+
             for (itemEstoque item : itens){
                 escreve.append(item.nome + ";"+item.quantidade + ";"+item.valor+"\n");
             }

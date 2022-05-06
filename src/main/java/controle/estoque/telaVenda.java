@@ -21,17 +21,17 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Pane;
 
 import controle.Keys;
+import controle.Keys.alertas;
 
 public class telaVenda extends App {
 
     // table view de produtos sendo vendidos
     private final GuardaVendas vendas = new GuardaVendas();
     private final Estoque estoque = new Estoque();
-    private final TableView<RegistroVenda> carrinho = new TableView<>();
-    private final TableView<RegistroVenda> visCupon = new TableView<>();
-    private final ObservableList<RegistroVenda> cacheVenda = FXCollections.observableArrayList();
-    private final ObservableList<RegistroVenda> listCupon = FXCollections.observableArrayList();
-    private int idVenda = vendas.novaId();
+    private final TableView<SaidaProduto> carrinho = new TableView<>();
+    private final TableView<SaidaProduto> visCupon = new TableView<>();
+    private final ObservableList<SaidaProduto> cacheVenda = FXCollections.observableArrayList();
+    private final ObservableList<SaidaProduto> listCupon = FXCollections.observableArrayList();
 
     public void view(Stage stage){
         Pane painel = new Pane();
@@ -88,12 +88,12 @@ public class telaVenda extends App {
         carrinho.setItems(cacheVenda);
         visCupon.setItems(listCupon);
 
-        TableColumn<RegistroVenda, String> col1 = new TableColumn<>();
+        TableColumn<SaidaProduto, String> col1 = new TableColumn<>();
         col1.setCellValueFactory(new PropertyValueFactory<>("str"));
         col1.setId("col1");
 
-        TableColumn<RegistroVenda, String> colTitle = new TableColumn<>("QUITANDA");
-        TableColumn<RegistroVenda, String> colSubTitle = new TableColumn<>("PROD | QTD | VALOR.Ú | VALOR.T");
+        TableColumn<SaidaProduto, String> colTitle = new TableColumn<>("QUITANDA");
+        TableColumn<SaidaProduto, String> colSubTitle = new TableColumn<>("PROD | QTD | VALOR.Ú | VALOR.T");
 
         colSubTitle.setCellValueFactory(new PropertyValueFactory<>("str"));
         carrinho.getColumns().addAll(Arrays.asList(col1));
@@ -113,15 +113,14 @@ public class telaVenda extends App {
         });
         // Event click button +
         btn_adicionar.setOnAction(evento ->{
-            if ((produto.getValue() != null && vendedor.getValue() != null && 
+            if ((produto.getValue() != null && 
                 tb_quantidade.getText() != null && tb_valor.getText() != null)
             ){
-                if (produto.getValue().toString() != "" && vendedor.getValue().toString() != "" && 
+                if (produto.getValue().toString() != "" && 
                 tb_quantidade.getText() != "" && tb_valor.getText() != ""){
-                    cacheVenda.add(new RegistroVenda(
-                        idVenda,
+
+                    cacheVenda.add(new SaidaProduto(
                         produto.getValue().toString(),
-                        vendedor.getValue().toString(), 
                         Integer.parseInt(tb_quantidade.getText()), 
                         Double.parseDouble(tb_valor.getText().replace(",", "."))
                     ));
@@ -136,22 +135,29 @@ public class telaVenda extends App {
         // Event click button registrarVenda
         registrarVenda.setOnAction(evento ->{
             String retorno = "Selecione pelo menos um produto";
-            for (RegistroVenda venda : cacheVenda) {
-                if (vendas.novaVenda(venda)==Keys.alertas.msg_venda_realizada){
-                    retorno = Keys.alertas.msg_venda_realizada;
-                }else{
-                    vendas.deletaRegistro(idVenda);
-                    retorno = Keys.alertas.erro_inesperado;
-                }
-            }
-            idVenda = vendas.novaId();
-            vendedor.setValue(null);
-            produto.setValue(null);
-            vendedor.setValue(null);
-            tb_quantidade.setText(null); 
-            tb_valor.setText(null);
-            cacheVenda.clear();
-            listCupon.clear();
+            if(vendedor.getValue() != null){
+                if(vendedor.getValue().toString() != ""){
+
+                    ArrayList<SaidaProduto> produtos = new ArrayList<SaidaProduto>();
+                    produtos.addAll(cacheVenda);
+
+                    RegistroVenda registro = new RegistroVenda(
+                        vendas.novaId(), vendedor.getValue().toString(), produtos
+                    );
+                    vendas.novaVenda(registro);
+
+                    vendedor.setValue(null);
+                    produto.setValue(null);
+                    vendedor.setValue(null);
+                    tb_quantidade.setText(null); 
+                    tb_valor.setText(null);
+                    cacheVenda.clear();
+                    listCupon.clear();
+                    retorno = alertas.msg_venda_realizada;
+                    
+                }else{retorno = "Selecione um vendedor";}
+            }else{retorno = "Selecione um vendedor";}
+            
 
             Alert message = new Alert(Alert.AlertType.INFORMATION);
             message.setTitle("Registro de Venda:");
@@ -202,12 +208,12 @@ public class telaVenda extends App {
         stage.setScene(sc);
     }
     private void buttonRemove() {
-        TableColumn<RegistroVenda, Void> colBtn = new TableColumn<>();
+        TableColumn<SaidaProduto, Void> colBtn = new TableColumn<>();
 
-        Callback<TableColumn<RegistroVenda, Void>, TableCell<RegistroVenda, Void>> cellFactory = new Callback<TableColumn<RegistroVenda, Void>, TableCell<RegistroVenda, Void>>() {
+        Callback<TableColumn<SaidaProduto, Void>, TableCell<SaidaProduto, Void>> cellFactory = new Callback<TableColumn<SaidaProduto, Void>, TableCell<SaidaProduto, Void>>() {
             @Override
-            public TableCell<RegistroVenda, Void> call(final TableColumn<RegistroVenda, Void> param) {
-                final TableCell<RegistroVenda, Void> cell = new TableCell<RegistroVenda, Void>() {
+            public TableCell<SaidaProduto, Void> call(final TableColumn<SaidaProduto, Void> param) {
+                final TableCell<SaidaProduto, Void> cell = new TableCell<SaidaProduto, Void>() {
 
                     
                     private final Button btn = new Button("REMOVER");
@@ -260,7 +266,7 @@ public class telaVenda extends App {
             }
         }
         if (indice != -1) listCupon.remove(indice);
-        listCupon.add(new RegistroVenda(-1,"total","total", 0, soma));
+        listCupon.add(new SaidaProduto("total", 0, soma));
     }
 
 }

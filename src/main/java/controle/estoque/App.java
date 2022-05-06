@@ -338,7 +338,7 @@ public class App extends Application {
         btn_geraHTML.setOnAction(evento ->{
             String retorno;
             retorno = Keys.alertas.msg_relatorio_gerado_com_sucesso;
-            new Gera_html();         
+            new Gera_html(alunos);         
 
             Alert message = new Alert(Alert.AlertType.INFORMATION);
             message.setTitle("Relatório:");
