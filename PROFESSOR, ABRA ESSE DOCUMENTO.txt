@@ -1,0 +1,11 @@
+
+    public Aluno[] alunos = new Aluno[]{
+        new Aluno("Bárbara Marcheti Fiorin", "2021101634","N30"),
+        new Aluno("Gabriela Espinoza de Souza","2022103060","N20"),
+        new Aluno("Lucas Almeida Tiburtino da Silva", "2021101577","N30"),
+        new Aluno("Matheus Fernandes de Figueiredo", "2021101596","N30"),
+        new Aluno("Raylla do Sol Dias", "2021101569","N30"),
+        new Aluno("Thales Tayson do Nascimento Vargas", "2021101581","N30"),
+    }; 
+
+Link github: https://github.com/LucasATS/Controle-de-estoque
