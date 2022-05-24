@@ -13,8 +13,8 @@ import controle.Keys;
 
 public class Gera_html {
 
-    private final GuardaVendas vendas = new GuardaVendas();
-    private final Estoque estoque = new Estoque();
+    private final GuardaVendas vendas = App.getVendas();
+    private final Estoque estoque = App.getEstoque();
 
     public  Gera_html(Aluno[] alunos){
         try {

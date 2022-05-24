@@ -19,8 +19,10 @@ import javafx.geometry.Pos;
 
 public class App extends Application {
 
-    public Estoque estoque = new Estoque();
-    public GuardaVendas guardaVenda = new GuardaVendas();
+    public static Estoque estoque;
+    public static GuardaVendas guardaVenda;
+    public static Financeiro financeiro;
+
 
     public Aluno[] alunos = new Aluno[]{
         new Aluno("Bárbara Marcheti Fiorin", "2021101634","N30"),
@@ -30,12 +32,28 @@ public class App extends Application {
         new Aluno("Raylla do Sol Dias", "2021101569","N30"),
         new Aluno("Thales Tayson do Nascimento Vargas", "2021101581","N30"),
     };
+
+
     @Override
     public void start(Stage stage) throws IOException {
+        
+        cnxSer.Carrega();
+        
+        try {
+            
+            if (estoque.exist()==true){}
 
+        } catch (Exception e) {
+            estoque = new Estoque();
+            guardaVenda = new GuardaVendas();
+            financeiro = new Financeiro();
+        }
+        
         stage.setTitle("Controle de Estoque");
         tela_Principal(stage);
         stage.show();
+
+        stage.setOnCloseRequest(e -> cnxSer.save());
     }
 
     public void tela_Principal(Stage stage){
@@ -49,6 +67,24 @@ public class App extends Application {
         hello.setLayoutX(10);
         hello.setLayoutY(40);
 
+        Label lb_Gasto = new Label("Valor Gasto: " + financeiro.getValorGasto());
+        Label lb_Venda = new Label("Valor Vendas: " + financeiro.getValorVendas());
+        Label lb_Lucro = new Label("Valor Lucro: " + financeiro.getValorLucro());
+        Label lb_Valor = new Label("Caixa atual: " + financeiro.getValorCaixa());
+
+        lb_Gasto.setLayoutX(450);
+        lb_Gasto.setLayoutY(80);
+
+        lb_Venda.setLayoutX(450);
+        lb_Venda.setLayoutY(120);
+
+        lb_Lucro.setLayoutX(450);
+        lb_Lucro.setLayoutY(160);
+
+        lb_Valor.setLayoutX(450);
+        lb_Valor.setLayoutY(200);
+
+
         Label tituloTabela = new Label("Alunos:");
         tituloTabela.setLayoutX(10);
         tituloTabela.setLayoutY(80);
@@ -60,6 +96,10 @@ public class App extends Application {
         painel.getChildren().add(tabelaNomes);
         painel.getChildren().add(menu);
         painel.getChildren().add(hello);
+        painel.getChildren().add(lb_Gasto);
+        painel.getChildren().add(lb_Lucro);
+        painel.getChildren().add(lb_Valor);
+        painel.getChildren().add(lb_Venda);
 
         stage.setScene(sc);
     }
@@ -71,9 +111,11 @@ public class App extends Application {
         Label lb_nome = new Label("Produto: ");
         Label lb_quantidade = new Label("Quantidade: ");
         Label lb_valor = new Label("Valor: ");
+        Label lb_margem = new Label("Margem: ");
         TextField tb_nome = new TextField();
         TextField tb_quantidade = new TextField();
         TextField tb_valor = new TextField();
+        TextField tb_margem = new TextField();
         Button btn_adicionar = new Button("Adicionar ao estoque");
 
         btn_adicionar.setOnAction(evento ->{
@@ -81,7 +123,8 @@ public class App extends Application {
             retorno = estoque.novoItem(
                 tb_nome.getText(), 
                 Integer.parseInt(tb_quantidade.getText()), 
-                Double.parseDouble(tb_valor.getText().replace(",", "."))
+                Double.parseDouble(tb_valor.getText().replace(",", ".")),
+                Integer.parseInt(tb_margem.getText().replace(",", "."))
             );
             Alert message = new Alert(Alert.AlertType.INFORMATION);
             message.setTitle("Estoque:");
@@ -101,6 +144,9 @@ public class App extends Application {
         lb_valor.setLayoutX(10);
         lb_valor.setLayoutY(120);
 
+        lb_margem.setLayoutX(10);
+        lb_margem.setLayoutY(160);
+
         tb_nome.setLayoutX(100);
         tb_nome.setLayoutY(40);
 
@@ -110,8 +156,11 @@ public class App extends Application {
         tb_valor.setLayoutX(100);
         tb_valor.setLayoutY(120);
 
+        tb_margem.setLayoutX(100);
+        tb_margem.setLayoutY(160);
+
         btn_adicionar.setLayoutX(70);
-        btn_adicionar.setLayoutY(160);
+        btn_adicionar.setLayoutY(210);
         
         Scene sc = new Scene(painel,810,675);
         sc.getStylesheets().add(getClass().getResource(Keys.files.styles_css).toExternalForm());
@@ -124,6 +173,8 @@ public class App extends Application {
         painel.getChildren().add(tb_quantidade);
         painel.getChildren().add(tb_valor);
         painel.getChildren().add(btn_adicionar);
+        painel.getChildren().add(lb_margem);
+        painel.getChildren().add(tb_margem);
 
         stage.setScene(sc);
     }
@@ -135,7 +186,7 @@ public class App extends Application {
 
         String itens[] = new String[estoque.quantItens()];
         for (int i=0; i< estoque.quantItens();i++){
-            itens[i] = estoque.itens[i].nome;
+            itens[i] = estoque.itens[i].getNome();
         }
         
         Label lb_nome = new Label("Produto: ");
@@ -177,6 +228,52 @@ public class App extends Application {
         stage.setScene(sc);
     }
 
+    public void iniciaCaixa(Stage stage){
+        Pane painel = new Pane();
+        Label lb_Titulo = new Label("Valor Inicial do Caixa");
+        Label lb_nome = new Label("Valor: ");
+        TextField tb_valor = new TextField();
+
+        Button btn_save = new Button("Salvar");
+
+        btn_save.setOnAction(evento ->{
+            String retorno;
+            retorno = financeiro.iniciaCaixa(
+                Double.parseDouble(tb_valor.getText().replace(",", "."))
+            );
+
+            Alert message = new Alert(Alert.AlertType.INFORMATION);
+            message.setTitle("Financeiro:");
+            message.setHeaderText("Resultado:");
+            message.setContentText(retorno);
+            message.showAndWait();
+            
+            tela_Principal(stage);
+        });
+
+        lb_Titulo.setLayoutX(0);
+        lb_Titulo.setLayoutY(0);
+
+        lb_nome.setLayoutX(10);
+        lb_nome.setLayoutY(40);
+
+        tb_valor.setLayoutX(100);
+        tb_valor.setLayoutY(40);
+
+        btn_save.setLayoutX(70);
+        btn_save.setLayoutY(80);
+
+        
+        Scene sc = new Scene(painel,810,675);
+        sc.getStylesheets().add(getClass().getResource(Keys.files.styles_css).toExternalForm());
+
+        painel.getChildren().add(lb_nome);
+        painel.getChildren().add(tb_valor);
+        painel.getChildren().add(btn_save);
+
+        stage.setScene(sc);
+    }
+
     public void aumentaEstoque(Stage stage){
         Pane painel = new Pane();
         ToolBar menu = cria_barraMenu(stage);
@@ -184,7 +281,7 @@ public class App extends Application {
 
         String itens[] = new String[estoque.quantItens()];
         for (int i=0; i< estoque.quantItens();i++){
-            itens[i] = estoque.itens[i].nome;
+            itens[i] = estoque.itens[i].getNome();
         }
         
         Label lb_nome = new Label("Produto: ");
@@ -239,14 +336,14 @@ public class App extends Application {
         stage.setScene(sc);
     }
 
-    public void alteraValor(Stage stage){
+    public void alteraMargem(Stage stage){
         Pane painel = new Pane();
         ToolBar menu = cria_barraMenu(stage);
 
 
         String itens[] = new String[estoque.quantItens()];
         for (int i=0; i< estoque.quantItens();i++){
-            itens[i] = estoque.itens[i].nome;
+            itens[i] = estoque.itens[i].getNome();
         }
         
         Label lb_nome = new Label("Produto: ");
@@ -254,15 +351,15 @@ public class App extends Application {
             FXCollections
             .observableArrayList(itens)
         );
-        Label lb_valor = new Label("novo Valor: ");
+        Label lb_valor = new Label("Margem: ");
         TextField tb_valor = new TextField();
         Button btn_salva = new Button("Salvar");
 
         btn_salva.setOnAction(evento ->{
             String retorno;
-            retorno = estoque.alterarValorMedio(
+            retorno = estoque.alterarMargem(
                 cb_nome.getValue().toString(),
-                Double.parseDouble(tb_valor.getText().replace(",", "."))
+                Integer.parseInt(tb_valor.getText().replace(",", "."))
             );
 
             Alert message = new Alert(Alert.AlertType.INFORMATION);
@@ -333,7 +430,7 @@ public class App extends Application {
             aumentaEstoque(stage);
         });
         btn_alteraValor.setOnAction(evento ->{
-            alteraValor(stage);
+            alteraMargem(stage);
         });
         btn_geraHTML.setOnAction(evento ->{
             String retorno;
@@ -414,6 +511,31 @@ public class App extends Application {
         tabela.setLayoutY(100);
         return tabela;                
     }
+
+    public static Estoque getEstoque(){
+        return estoque;
+    }
+
+    public static void setEstoque(Estoque theEstoque){
+        estoque = theEstoque;
+    }
+
+    public static void setVendas(GuardaVendas theVendas){
+        guardaVenda = theVendas;
+    }    
+
+    public static GuardaVendas getVendas(){
+        return guardaVenda;
+    }
+
+    public static void setFinanceiro(Financeiro theFinanceiro){
+        financeiro = theFinanceiro;
+    }    
+
+    public static Financeiro getFinanceiro(){
+        return financeiro;
+    }
+
     public static void main(String[] args) {
         launch();
     }

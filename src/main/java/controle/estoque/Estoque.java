@@ -1,67 +1,35 @@
 package controle.estoque;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Scanner;
+
 
 import controle.Keys;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 
-public class Estoque {
+public class Estoque implements Serializable{
     itemEstoque[] itens = new itemEstoque[0];
+
     int quantItens(){
         return this.itens.length;
     }
-    Estoque(){
-        try {
-            File arquivo = new File(Keys.files.EstoqueBD);
-
-            Scanner estoqueBD = new Scanner(arquivo, "ISO-8859-1");
-            while (estoqueBD.hasNextLine()) {
-                String[] dados = estoqueBD.nextLine().split(";");
-                novoItem(dados[0], Integer.parseInt(dados[1]), Double.parseDouble(dados[2]));
-            }
-
-            estoqueBD.close();
-        } 
-        catch (FileNotFoundException e) {
-            salvaFile();
-        }
+    
+    public Boolean exist(){
+        return true;
     }
+
     itemEstoque getItem (String nome){
         itemEstoque item;
         item = null;
         for (itemEstoque itemEstoque : itens) {
-            if (itemEstoque.nome.equals(nome) == true) item = itemEstoque;
+            if (itemEstoque.getNome().equals(nome) == true) item = itemEstoque;
         }
         return item;
     }
-    void salvaFile(){
-        try {
-            File arquivo = new File(Keys.files.EstoqueBD);
-
-            arquivo.createNewFile();
-            
-            FileOutputStream fos = new FileOutputStream(arquivo);
-            OutputStreamWriter osw = new OutputStreamWriter(fos, "ISO-8859-1");
-            Writer escreve = new BufferedWriter(osw); 
-
-            for (itemEstoque item : itens){
-                escreve.append(item.nome + ";"+item.quantidade + ";"+item.valor+"\n");
-            }
-            escreve.close();
-        } catch (Exception e) {
-            ErroException(Keys.alertas.erro_inesperado, e);
-        }
-    }
-    String novoItem(String nome, int quantidade, double valor){
+    
+    String novoItem(String nome, int quantidade, double valor, int margem){
         int indice = indiceDe(nome);
         if (indice !=-1){
             return Keys.alertas.erro_item_ja_existe;
@@ -74,10 +42,11 @@ public class Estoque {
             this.itens[i]=item;
             i++;
         }
-        this.itens[i] = new itemEstoque(nome, quantidade, valor);
-        salvaFile();
+        this.itens[i] = new itemEstoque(nome, quantidade, valor, margem);
+        App.financeiro.addCompra(this.itens[i]);
         return Keys.alertas.msg_item_add_com_sucesso;
     }
+
     String deletaItem(String nome){
         int indice = indiceDe(nome);
         if (indice ==-1){
@@ -94,13 +63,13 @@ public class Estoque {
                 i++;
             }
         }
-        salvaFile();
         return Keys.alertas.msg_item_rmv_com_sucesso;
     }
+
     int indiceDe(String nome){
         int pos = -1;
         for (int i=0;i<this.itens.length;i++){
-            if (this.itens[i].nome.equals(nome)==true){
+            if (this.itens[i].getNome().equals(nome)==true){
                 pos=i;
             }
         }
@@ -111,23 +80,22 @@ public class Estoque {
         if (indice ==-1){
             return Keys.alertas.erro_item_inexistente;
         }
-        this.itens[indice].alteraQuantidade(this.itens[indice].quantidade + quantidade);
-        salvaFile();
+        this.itens[indice].setQtd(this.itens[indice].getQtd() + quantidade);
         return "Adicionado mais "+nome+" ao estoque.";
     }
     void diminuiQuantidade(String nome,int quantidade){
         int indice = indiceDe(nome);
-        this.itens[indice].alteraQuantidade(this.itens[indice].quantidade - quantidade);
-        salvaFile();
+        this.itens[indice].setQtd(this.itens[indice].getQtd() - quantidade);
+
     }
-    String alterarValorMedio(String nome,double valor){
+    String alterarMargem(String nome,int margem){
         int indice = indiceDe(nome);
         if (indice ==-1){
             return Keys.alertas.erro_item_inexistente;
         }
-        this.itens[indice].alteraValor(valor);
-        salvaFile();
-        return "valor do "+nome+" atualizado no estoque.";
+        this.itens[indice].alteraMargem(margem);
+
+        return "Margem de lucro do "+nome+" atualizado.";
     }
     ArrayList<String> geraHTML(ArrayList<String> modelo){
         ArrayList<String> escreve = new ArrayList<String>();
@@ -136,11 +104,11 @@ public class Estoque {
                 if (str.equals("{dados-estoque}")==true) {
 
                     for (itemEstoque item : itens){
-                        String valorRS = new DecimalFormat("R$ #,###.00").format(item.valor);
+                        String valorRS = new DecimalFormat("R$ #,###.00").format(item.getValorVenda());
                         escreve.add("<tr>\n" + 
-                            "<td>"+item.nome+"</td>" + 
+                            "<td>"+item.getQtd()+"</td>" + 
                             "<td>"+valorRS+"</td>" + 
-                            "<td>"+item.quantidade+"</td>\n" +
+                            "<td>"+item.getQtd()+"</td>\n" +
                             "</tr>\n");
                     }
                 }else{

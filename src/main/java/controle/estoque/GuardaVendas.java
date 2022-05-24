@@ -1,114 +1,15 @@
 package controle.estoque;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import controle.Keys;
-import controle.Keys.files;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
-public class GuardaVendas {
+public class GuardaVendas implements Serializable {
 
     ArrayList<RegistroVenda> itens = new  ArrayList<RegistroVenda>();
-
-    Estoque estoque = new Estoque();
-
-    GuardaVendas(){
-
-        try {
-            File arquivo1 = new File(files.GuardaVendasBD);
-            File arquivo2 = new File(files.SaidaProdutoBD);
-
-            Scanner GuardaVendasBD = new Scanner(arquivo1, "ISO-8859-1");
-            Scanner SaidaProdutoBD;
-
-            ArrayList<SaidaProduto> saidas;
-
-            while (GuardaVendasBD.hasNextLine()) {
-
-                String[] dados = GuardaVendasBD.nextLine().split(";");
-                int id =  Integer.parseInt(dados[0]);
-                String vendedor = dados[1];
-                saidas = new ArrayList<SaidaProduto>();
-
-                SaidaProdutoBD = new Scanner(arquivo2, "ISO-8859-1");
-
-                while (SaidaProdutoBD.hasNextLine()){
-
-                    String[] ler = SaidaProdutoBD.nextLine().split(";");
-                    if (ler[0].equals(String.valueOf(id)) == true){
-                        saidas.add(new SaidaProduto(ler[1], Integer.parseInt(ler[2]), Double.parseDouble(ler[3])));
-                    }
-                }
-
-                SaidaProdutoBD.close();
-
-                RegistroVenda registro = new RegistroVenda(
-                    id, vendedor, saidas
-                );
-
-                carrega(registro);
-            }
-
-            GuardaVendasBD.close();
-        } 
-        catch (FileNotFoundException e) {
-            salvaFile();
-        }
-    }
-    void salvaFile(){
-
-        String fileVendas = "", fileSaidas = "";
-
-        for (RegistroVenda item : itens){
-            fileVendas += item.getId() + ";" + item.getVendedor()+ "\n";
-            for (SaidaProduto produto : item.getProdutos()){
-                fileSaidas += item.getId() + ";" + produto.getNome() + ";" + produto.getQtd() + ";" + produto.getValor() + "\n";
-            }
-        }
-
-        try {
-            File arquivo = new File(files.GuardaVendasBD);
-
-            arquivo.createNewFile();
-            
-            FileOutputStream fos = new FileOutputStream(arquivo);
-            OutputStreamWriter osw = new OutputStreamWriter(fos, "ISO-8859-1");
-            Writer escreve = new BufferedWriter(osw); 
-
-            escreve.write(fileVendas);
-
-            escreve.close();
-
-            try {
-
-                File arquivo2 = new File(files.SaidaProdutoBD);
-
-                arquivo2.createNewFile();
-    
-                FileOutputStream fos2 = new FileOutputStream(arquivo2);
-                OutputStreamWriter osw2 = new OutputStreamWriter(fos2, "ISO-8859-1");
-                Writer escreve2 = new BufferedWriter(osw2); 
-    
-                escreve2.write(fileSaidas);
-
-                escreve2.close();
-
-            } catch (Exception e) {
-                ErroException(Keys.alertas.erro_inesperado, e);
-            }
-        }
-        catch (Exception e) {
-            ErroException(Keys.alertas.erro_inesperado, e);
-        }
-    }
 
     int novaId(){
         int new_id = 0;
@@ -125,11 +26,11 @@ public class GuardaVendas {
 
     String novaVenda(RegistroVenda registro){
         
-        for (SaidaProduto saida : registro.getProdutos()){
-            estoque.diminuiQuantidade(saida.getNome(), saida.getQtd());
+        for (itemEstoque saida : registro.getProdutos()){
+            App.estoque.diminuiQuantidade(saida.getNome(), saida.getQtd());
+            App.financeiro.addvenda(saida);
         }
         itens.add(registro);
-        salvaFile();
         
         return Keys.alertas.msg_venda_realizada;
     }
@@ -140,7 +41,6 @@ public class GuardaVendas {
             if (itens.get(i).getId()==id) itens.remove(i);
         }
         
-        salvaFile();
 
         return Keys.alertas.msg_item_rmv_com_sucesso;
 

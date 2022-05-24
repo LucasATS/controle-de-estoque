@@ -26,12 +26,10 @@ import controle.Keys.alertas;
 public class telaVenda extends App {
 
     // table view de produtos sendo vendidos
-    private final GuardaVendas vendas = new GuardaVendas();
-    private final Estoque estoque = new Estoque();
-    private final TableView<SaidaProduto> carrinho = new TableView<>();
-    private final TableView<SaidaProduto> visCupon = new TableView<>();
-    private final ObservableList<SaidaProduto> cacheVenda = FXCollections.observableArrayList();
-    private final ObservableList<SaidaProduto> listCupon = FXCollections.observableArrayList();
+    private final TableView<itemEstoque> carrinho = new TableView<>();
+    private final TableView<itemEstoque> visCupon = new TableView<>();
+    private final ObservableList<itemEstoque> cacheVenda = FXCollections.observableArrayList();
+    private final ObservableList<itemEstoque> listCupon = FXCollections.observableArrayList();
 
     public void view(Stage stage){
         Pane painel = new Pane();
@@ -43,7 +41,7 @@ public class telaVenda extends App {
         //itens de estoque
         String itens[] = new String[estoque.quantItens()];
         for (int i=0; i< estoque.quantItens();i++){
-            itens[i] = estoque.itens[i].nome;
+            itens[i] = estoque.itens[i].getNome();
         }
         ComboBox<String> produto = new ComboBox<>(
             FXCollections.observableArrayList(itens)
@@ -88,12 +86,12 @@ public class telaVenda extends App {
         carrinho.setItems(cacheVenda);
         visCupon.setItems(listCupon);
 
-        TableColumn<SaidaProduto, String> col1 = new TableColumn<>();
+        TableColumn<itemEstoque, String> col1 = new TableColumn<>();
         col1.setCellValueFactory(new PropertyValueFactory<>("str"));
         col1.setId("col1");
 
-        TableColumn<SaidaProduto, String> colTitle = new TableColumn<>("QUITANDA");
-        TableColumn<SaidaProduto, String> colSubTitle = new TableColumn<>("PROD | QTD | VALOR.Ú | VALOR.T");
+        TableColumn<itemEstoque, String> colTitle = new TableColumn<>("QUITANDA");
+        TableColumn<itemEstoque, String> colSubTitle = new TableColumn<>("PROD | QTD | VALOR.Ú | VALOR.T");
 
         colSubTitle.setCellValueFactory(new PropertyValueFactory<>("str"));
         carrinho.getColumns().addAll(Arrays.asList(col1));
@@ -105,7 +103,7 @@ public class telaVenda extends App {
         // Event seleciona produto
         produto.setOnAction(evento ->{
             try {
-                double valor = estoque.getItem(produto.getValue().toString()).valor;
+                double valor = estoque.getItem(produto.getValue().toString()).getValorVenda();
                 tb_valor.setText(String.valueOf(valor));
             } catch (Exception e) {
                 tb_valor.setText("0.0");
@@ -118,12 +116,14 @@ public class telaVenda extends App {
             ){
                 if (produto.getValue().toString() != "" && 
                 tb_quantidade.getText() != "" && tb_valor.getText() != ""){
-
-                    cacheVenda.add(new SaidaProduto(
-                        produto.getValue().toString(),
-                        Integer.parseInt(tb_quantidade.getText()), 
-                        Double.parseDouble(tb_valor.getText().replace(",", "."))
+                    itemEstoque itemTemp = estoque.getItem(produto.getValue().toString());
+                    cacheVenda.add(new itemEstoque(
+                        itemTemp.getNome(),
+                        Integer.parseInt(tb_quantidade.getText()),
+                        estoque.getItem(produto.getValue().toString()).getValor(),
+                        (int) (((Double.parseDouble(tb_valor.getText()) / itemTemp.getValor())-1)*100)
                     ));
+                    itemTemp = null;
                     produto.setValue(null);
                     tb_quantidade.setText(null); 
                     tb_valor.setText(null);
@@ -138,14 +138,14 @@ public class telaVenda extends App {
             if(vendedor.getValue() != null){
                 if(vendedor.getValue().toString() != ""){
 
-                    ArrayList<SaidaProduto> produtos = new ArrayList<SaidaProduto>();
+                    ArrayList<itemEstoque> produtos = new ArrayList<itemEstoque>();
                     produtos.addAll(cacheVenda);
 
                     RegistroVenda registro = new RegistroVenda(
-                        vendas.novaId(), vendedor.getValue().toString(), produtos
+                        guardaVenda.novaId(), vendedor.getValue().toString(), produtos
                     );
-                    vendas.novaVenda(registro);
-
+                    guardaVenda.novaVenda(registro);
+                    
                     vendedor.setValue(null);
                     produto.setValue(null);
                     vendedor.setValue(null);
@@ -208,12 +208,12 @@ public class telaVenda extends App {
         stage.setScene(sc);
     }
     private void buttonRemove() {
-        TableColumn<SaidaProduto, Void> colBtn = new TableColumn<>();
+        TableColumn<itemEstoque, Void> colBtn = new TableColumn<>();
 
-        Callback<TableColumn<SaidaProduto, Void>, TableCell<SaidaProduto, Void>> cellFactory = new Callback<TableColumn<SaidaProduto, Void>, TableCell<SaidaProduto, Void>>() {
+        Callback<TableColumn<itemEstoque, Void>, TableCell<itemEstoque, Void>> cellFactory = new Callback<TableColumn<itemEstoque, Void>, TableCell<itemEstoque, Void>>() {
             @Override
-            public TableCell<SaidaProduto, Void> call(final TableColumn<SaidaProduto, Void> param) {
-                final TableCell<SaidaProduto, Void> cell = new TableCell<SaidaProduto, Void>() {
+            public TableCell<itemEstoque, Void> call(final TableColumn<itemEstoque, Void> param) {
+                final TableCell<itemEstoque, Void> cell = new TableCell<itemEstoque, Void>() {
 
                     
                     private final Button btn = new Button("REMOVER");
@@ -262,11 +262,11 @@ public class telaVenda extends App {
             if (listCupon.get(i).getNome()=="total") {
                 indice=i;
             }else{
-                soma += listCupon.get(i).getValor()*listCupon.get(i).getQtd();
+                soma += listCupon.get(i).getValortotal();
             }
         }
         if (indice != -1) listCupon.remove(indice);
-        listCupon.add(new SaidaProduto("total", 0, soma));
+        listCupon.add(new itemEstoque("total", 0, soma,1));
     }
 
 }

@@ -1,20 +1,21 @@
 //RegistoVendas
 package controle.estoque;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class RegistroVenda {
+public class RegistroVenda implements Serializable {
 
     private int id;
     private String vendedor;
     private double valor;
-    private ArrayList<SaidaProduto> produtos;
+    private ArrayList<itemEstoque> produtos;
 
-    public RegistroVenda(int id, String vendedor, ArrayList<SaidaProduto> produtos){
+    public RegistroVenda(int id, String vendedor, ArrayList<itemEstoque> produtos){
         this.id = id;
         this.vendedor = vendedor;
         this.produtos = produtos;
 
-        for (SaidaProduto produto : produtos){
+        for (itemEstoque produto : produtos){
             this.valor += produto.getValortotal();
         }
 
@@ -25,11 +26,11 @@ public class RegistroVenda {
     public void setId(int id){
         this.id = id;
     }
-    public ArrayList<SaidaProduto> getProdutos() {
+    public ArrayList<itemEstoque> getProdutos() {
         return produtos;
     }
 
-    public void setProdutos(ArrayList<SaidaProduto> produtos) {
+    public void setProdutos(ArrayList<itemEstoque> produtos) {
         this.produtos = produtos;
     }
     public String getVendedor() {

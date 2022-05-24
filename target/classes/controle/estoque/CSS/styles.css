@@ -1,0 +1,36 @@
+.root{
+    -fx-background-color: white;
+}
+.tool-bar{
+    -fx-background-color: #FFD37F;
+}
+.button{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+.combo-box{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;  
+}
+.text-field{
+    -fx-font-weight: bold;
+    -fx-border-radius: 6;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;  
+}
