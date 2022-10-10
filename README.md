@@ -4,9 +4,6 @@
 Projeto solicitado por professor para ser realizado em grupo com o objetivo de criar um sistema para ter o controle de estoque.
 
 
-[🔗 Clique aqui para acessar](https://lucasats.github.io/Xadrez/)
-
-
 ## __🛠 Tecnologias__
 ![Java](https://img.shields.io/badge/OpenJDK-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
