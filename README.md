@@ -3,9 +3,10 @@
 
 Projeto solicitado por professor para ser realizado em grupo com o objetivo de criar um sistema para ter o controle de estoque.
 
+[![preview](./.github/preview-xl.png)](https://github.com/LucasATS/Controle-de-estoque)
 
 ## __🛠 Tecnologias__
-![Java](https://img.shields.io/badge/OpenJDK-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
