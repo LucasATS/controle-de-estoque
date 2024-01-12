@@ -1,7 +1,7 @@
 # __Controle de Estoque__
 
 
-Projeto solicitado por professor para ser realizado em grupo com o objetivo de criar um sistema para ter o controle de estoque.
+Projeto realizado durante curso de Graduação de TADS pela Faculdade Insted com o objetivo de realizar em grupo um sistema de controle de estoque.
 
 [![preview](./.github/preview-xl.png)](https://github.com/LucasATS/Controle-de-estoque)
 
